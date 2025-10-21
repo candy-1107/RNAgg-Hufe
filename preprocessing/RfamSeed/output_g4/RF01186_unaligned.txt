@@ -1,0 +1,13 @@
+0 UGGCAACUAUGAUGAAAGAUUUGCUCUGUAUGUAAUAUAUUUUAUUACUACAUGAAGACAGCAGUCCCUCUAAACUGAUGUUGCCA (((((((........................................................................)))))))
+1 UGGCAACUGUGAUGAAAGAUUUGGUCUGUAUGUGAUAUAUUUAUUACUAAAUGUGGACAACAGUCCCUCUAAACUGACGUUGCCA (((((((.......................................................................)))))))
+2 UGGCAACUGUGAUGAAAGAUUUGGUCUAUACAGUAAUAUAUUUAUUACUACAUGAGGACAACAGUCCCUCUAAACUGAUGUUGCCA (((((((........................................................................)))))))
+3 UGGCAACUGUGAUGAAAUACUUGGUCUGUAUGUAAUGCAUUACUAAAUGAAGACAACAGUCCCUCUAAACUGACGUUGCCA (((((((...................................................................)))))))
+4 UGGCAACUAUGAUGAAGUAUUUGGUCUGUAUUACUAAAUGAAGACAACAGUCCCUCUAAGCUGAUGUUGCCA (((((((..........................................................)))))))
+5 GGGCAACCGUGAUGACAGGUUCAGUCUGUAUGUGUAAUGGGUUUCAUUACUACAUGAAGACACCAGUCCCUCUAAGCUGAUGUUGCCG .((((((..........................................................................)))))).
+6 UGGCAACUAUGAUGAAAGAUUCAGUCUGUAUGUAAUGUCUUGUUACUAAAUGAAGACAACAGUCCCUCUAAACUGAUGUUGCCA (((((((......................................................................)))))))
+7 UGGCAACUAUGAUGAAAAAUUUGAUCUGAAUGUAAUACAUUUUAUUACUAAAUGAGGACAACAGUCCCUCUAAACUGAUGUUGCCA (((((((........................................................................)))))))
+8 UGGCAACAGUGAUGACAGGUUUGGUCUGUAUGUAAUAUAUUUUAUUACUACAUGAAGACACCAGUCCCUCUAAGCUGAUGUUGCCA (((((((........................................................................)))))))
+9 UGGCAACUGUGAUGAAAGAUUUGGUCUGUAUGUAAUAGAUUUUAUUACUAAAUGAGGACAACAGUCCCUCUAAACUGAUGUUGCCA (((((((........................................................................)))))))
+10 UGGCAACAAUGAUGACAGGUACUGUAACUGUAUGUGAUAUUUCAUUACUGCAUGGAGACACCAGUCCCUCUAAACUGAUGUUGCCA (((((((........................................................................)))))))
+11 UGGCAACUAUGAUGAAAAAUUUGGUCUGUAUGUAAUAUGUUUUAUUACAUGAGGACAACAGUCCCUCUAAACUGAUGUUGCCA (((((((.....................................................................)))))))
+12 UGGCAACUAUGAUGAAAGAUUUGGUCUGUAUGUAAUAUAUUUAAUUACUGAAUGAAGACAACAGUCCCUCUAAACUGAUGUUGCCA (((((((........................................................................)))))))

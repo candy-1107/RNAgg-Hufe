@@ -1,0 +1,13 @@
+0 GUGUUGUGAUGAAUGAAACUUACACCAUCUUUCGACUGAAAAAUGUUAUGAAGCUAUACGAGUUUUUACUGAAACCCCUU (.(..........................................................................).)
+1 AUUUCGUGAUGAAUGACCCUAUCAUCAUCUUUCGACUGAAAAUCAUUUUGAUGCUAUACUAGUUUUCACUGAAUUUUAAA .((..........................................................................)).
+2 GUGUUGUGAUGAAUGAAACUUACACCAUCUUUCGACUGAAAAAUCUUAUGAUGCUAUACAAGUUUUCACUGAAACCCCCU (.(..........................................................................).)
+3 UGUUUAUGAUGAACCAAACUUAUCACCAUCUUUCGACUGAGCACAAACGUUGAUGCUAUACAAGUUUCACUGAUUCAUUUG ((.............................................................................))
+4 AUUUCGUGAUGAAUGACUUUUAUACCAUCUUUCGACUGAAAAACACUUUGAUGUAUACAAGUUUUCACUGAAUUUUAAA .((.........................................................................)).
+5 AUUUCGUGAUGAAUGACCAUUACAUCAUCUUUCGACUGAAAAACACUUUGAUGUAUACUAGUUUUCACUGAAUUUUAAA .((.........................................................................)).
+6 GUGUUGUGAUGAAUGAAACUUACACCAUCUUUCGACUGAAAAAUGUUAUGAAGCUAUACGAGUUUUUACUGAAAC ((.......................................................................))
+7 AUUUCGUGAUGAAUGACACUUAAACCAUCUUUCGACUGAACAUUUUGAUGCUAUACAAGUUUUUACUGAAUUUUAAA .((.......................................................................)).
+8 GUUUCAUGAUGAGCUAAAACUUUCACCAUCUUUCGACUGAUAAAUAUUGAUGCUAUAUAAGUUUUUACCCUGAUUACAU ((...........................................................................))
+9 AUUUCGUGAUGAAUGACCCUAUCAUCAUCUUUCGACUGAAAAUCAUUUUGAUGCUAUACUAGUUUUCACUGAAUU (.(.....................................................................).)
+10 GUGUUGUGAUGAAUGAAACUUACACCAUCUUUCGACUGAAAAAUGUUAUGAUGCUAUACAAGUUUUCACUGAAAUAUCUU (.(..........................................................................).)
+11 AUAUCGUGAUGAAUAAACUUAUCACCAUCUUUCGACUGAUCACAUCGUGACUGUUAUAUAGUUCCUUAACUGAUGCCGGUU (...............................................................................)
+12 AUUAUAUGAUGAUUCAAAUAAUAAUCACCAUCUUUCGACUGAGAACUGUGAUGGUAAUUUUUACUGAAAGCAAUU (.(.....................................................................).)

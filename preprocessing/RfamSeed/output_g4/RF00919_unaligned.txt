@@ -1,0 +1,8 @@
+0 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGACUCUCGCUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGG ((((((...(((.(((.((..((((((((.(((..........))).))))))))..)).))).)))...)))))).
+1 GCGGCCCCACGCACCAGGGUAAGAGAGACUCUCGCUUCCUGCCCUGGCCCGAGGGACCGA .(((.(((.((..((((((((.(((..........))).))))))))..)).))).))).
+2 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGACUCUCGCUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGGC ((((((...(((.(((.((..((((((((.(((..........))).))))))))..)).))).)))...))))))..
+3 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGACUUGCUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGGC ((((((...(((.(((.((..((((((((.(((........))).))))))))..)).))).)))...))))))..
+4 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGACUCGCUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGGC ((((((...(((.(((.((..((((((((.(((........))).))))))))..)).))).)))...))))))..
+5 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGAGUCUCGCUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGGC ((((((...(((.(((.((..((((((((.(((..........))).))))))))..)).))).)))...))))))..
+6 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGACUCACUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGGC ((((((...(((.(((.((..((((((((.(((........))).))))))))..)).))).)))...))))))..
+7 UUAGCCCUGCGGCCCCACGCACCAGGGUAAGAGAGAGUCUCAUUUCCUGCCCUGGCCCGAGGGACCGACUGGCUGGGC ((((((...(((.(((.((..((((((((.(((..........))).))))))))..)).))).)))...))))))..

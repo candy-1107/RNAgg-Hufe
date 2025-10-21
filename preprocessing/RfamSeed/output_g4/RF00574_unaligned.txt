@@ -1,0 +1,11 @@
+0 AAUGUGAAGCAAAUGAUGAUAAACUGGAUCUGACUGACUGUGCUGAGUCUGUUCAAUCCAACCCUGAGCUUCAUGUU ((((((((((.........................................................))))))))))
+1 AACAUGAAGCAGUGAUGACAGAUUGGAUCUGACUUAACUGCUGUGCUGAGUUUGUUCAAUCCAACCCUGAGCUUCAUGUU ((((((((((............................................................))))))))))
+2 AACAUGAAGCAAAUGAUGAUAAACUGGAUCUGACUGACUGUGCUGAGUUUGUUCAAUCCAACCCUGAGCUUCGUGUU ((((((((((.........................................................))))))))))
+3 AACAUGAAGUAAAUGAUGAUACACUGGAUCUGACUGACUGUGCUGAGCUUGUUCAAUCCAACCCUGAGCUUCAUGUU ((((((((((.........................................................))))))))))
+4 ACCAUGAAGCAGAUGAUGAGAAACUGGGUCUGACAGACUGUGCUGAGUUUGUUCAAUCCAACCCUGAGCUUCAUGGU ((((((((((.........................................................))))))))))
+5 GAUGUGAAGCAGUGAUGAGAAACUGGAUCUGACUGGCUGUGCUGAGUUUGUUCAAUCCAACCCUGAGCUUCACGUU ((((((((((........................................................))))))))))
+6 CACAUGAAGCAUAUGAUGACAAACUGGAUCUGAUAUUCUAUGUUGAAUUUCUUCAAUCCAACCCUGAGCUUCAUGUU .(((((((((.........................................................))))))))).
+7 AACAUAAGCCUAUGAUGAAAGUUGGAACUGACAUACCAUGCUGAGUUUGUUCAAUCCAACCCUGAGCUUCAUGUU (((((((((........................................................)))).)))))
+8 CCUAUGAAGCAAAUGAUGACAAACUGGAUCUGACUCACUGUGCUGAGUGUUUUCAAUCCAACCCUGAGCUUCAUGUU ..((((((((.........................................................))))))))..
+9 CACAUGAAGCAAAUGAUGAUAAACUGGAUCUGACAGACUAUGCUGAGUUUGUUCAAUCCAACCCUGAGCUUCAUGUU .(((((((((.........................................................))))))))).
+10 AACGUGAAGCAAAUGAUGAUAAAUUGGAUCUGAAUGACUGUGCGGAGUUUGUUCAAUCCAACCCUGAGCUUCAUGUU ((((((((((.........................................................))))))))))

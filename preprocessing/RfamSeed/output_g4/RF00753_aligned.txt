@@ -1,0 +1,14 @@
+0 -----UAGCAGCG---GGAACAGUACUGCAGUGGGCAAUCGGUGUUCUGGAGUAUUGUUUCUGCUGCCCGG--- .......((((((...((((((((.((.(((..((((.....))))))).)).)))))))))))))).......
+1 UGCCCUAGCAGCG---GGAACAGUACUGCAGUGGGCAAUUGGUGAUCUGGAGUAUUGUUUCUGCUGCCCGGGCA .((((..((((((...((((((((.((.(((..(.((.....)).)))).)).))))))))))))))..)))).
+2 UGCCCUAGCAGCG---GGAACAGUACUGCAGUGGGCGAUCGGUACUCUGGGGUAUUGUUUCUGCUGCCCGGGCA .((((..((((((...((((((((.((.(((..((.(.....).))))).)).))))))))))))))..)))).
+3 UGCCCUAGCAGCG---GGAACAGUACUGCAGUGGGCGAUCGGUGCUCUGGAGUAUUGUUCCUGCUGCCCGGGCA .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+4 UGCCCUAGCAGCG---GGAACAGUACUGCAGUGGGUGAUCCGUAUUCUGGAGUAUUGUUUCUGCUGCCCGGGUA .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+5 UGCCCUAGCAGCG---GGAACAGUACUGCAGUGAGUGUUUGGUGCCCUGGAGUAUUGUUUCCACUGCCUGGGUA .((((..((((.(...((((((((.((.(((...(((.....))).))).)).))))))))).))))..)))).
+6 UGCCCUAGCAGCG---GGAACAGUACUGCAGUGAGUGUUUGGUGCCCUGGAGUAUUGUUUCCGCUGCCUGGGUA .((((..((((((...((((((((.((.(((...(((.....))).))).)).))))))))))))))..)))).
+7 -----UAGCAGCG---GUAACACUACUGCAGUGAG-GUCUGG-GCUCUGGAGUAUUGUUUCUGCUGCCAGG--- .......((((((...(.((((.(.((.(((..((.........))))).)).).)))).))))))).......
+8 UGCCCUAGCAGCG---GGAACAGUUCUGCAGUGAGCGAUCGGUGCUCUGGAGUAUUGUUUCCGCUGCCAGGGU- .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+9 UGCCCUAGCAGCG---GGAACAGUUCUGCAGUGAGCGAUCGGUGCUCUGGAGUAUUGUUUCCGCUGCCAGGGUA .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+10 UGCCCUAGCAGCG---GGAACAGUUCUGCAGUGAGCGAUCGGUGCUCUGGGGUAUUGUUUCCGCUGCCAGGGUA .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+11 UGCCCUAGCAGCG---GGAACAGUUCUGCAGUGAGCGAUUGGUGCUCUGGAGUAUUGUUUCCGCUGCCAGGGUA .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+12 UGCCCUAGCAGCG---GGAACAGUUCUGCAGUGAGUGAUCAGUACUCUGGAGUAUUGUUUCCGCUGCCAGGGUA .((((..((((((...((((((((.((.(((..((((.....))))))).)).))))))))))))))..)))).
+13 UGCCCUAGCAGCGUCCAAAACAGUACUGCAGU----AUUUGGUAAGCUGGAGUAUUGUUUCCGCUGCUCGGGUA .((((..((((((....(((((((.((.(((.....(.....)...))).)).))))))).))))))..)))).

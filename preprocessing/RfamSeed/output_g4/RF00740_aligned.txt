@@ -1,0 +1,9 @@
+0 AGACG-GAGAGACCAGGUCACGUCUCUGCAGUUACACAGCUCAUGAGUGCCUGCUGGGGUGGAACCUGGUU----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+1 AGACA-GAGAGACCAGGUCACGUCUCUGCAGUUACACAGCUCAUGAGUGCCUGCUGGGGUGGAACCUGGUU----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+2 AGACA-GAGAAGCCAGGUCACGUCUCUGCAGUUACACAGCUCACGAGUGCCUGCUGGGGUGGAACCUGGUC----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+3 -GACA-GAGAAGCCAGGUCACGUCUCUGCAGUUACACAGCUCACGAGUGCCUGCUGGGGUGGAACCUGGUC----UGUCU .((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))).
+4 AGGCA-GAGAAGCCAGGUCACGUCUCUGCAGUUACACCGCUCACGAGUGCCUGCUGGGGUGGAACCUGGUC----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+5 AGGCA-GAGAAGCCAGGUCACGUCUCUGCAGUUACACCGCUCUCGAGUGCCUGCUGGGGUGGAACCUGGUC----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+6 AGACA-GAGAAGCCAGGUCACGUCUCUGCAGUUACACAGCUCAUGAGUGCCUGCUGGGGUGGAACCUGGUC----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+7 AGACA-GAGAGGCCAGGUCACGUCUCUGCAGUUACACAGCUCAUGAGUGCCUGCUGGGGUGGAACCUGGUC----UGUCU (((((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....)))))
+8 ---CAAGACAGGCCAGGUCACGUCUCUGCAGUUACACAGCUCAUGAGUGCCUGCUGGGGUGGAACCUGGUCUGUCUGUCU ...((.(....(((((((..((((((.((((...(((.........))).)))).))))))..))))))))....))...

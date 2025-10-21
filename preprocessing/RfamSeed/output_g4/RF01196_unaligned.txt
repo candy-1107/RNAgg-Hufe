@@ -1,0 +1,10 @@
+0 AGCCAAUGAUGAUUAAACCACAAAUGCAGGGAGUGGGCAGCUGGCAACAGUUGGCGCACGCAUGACCAGCAACUAAUCUUCUCGCUGACGCG .((......................................................................................)).
+1 AGCCAAUGAUGAUAAAACCACAAAUGGAGGGAGUGGGCAGCUGGCAACAGUUGGCUCACGCAUGACCAGCAACUAAUCUUCUCGCUGACGGCA .((.......................................................................................)).
+2 AGCCAAUGAUGAUAAAACUAUGAAUGUAGGGAGUGGGCAGCUGGCAACAGUUGGCGCACGCAUGACCAGCAACUAAUCUUCUCGCUGAUGGCA .((.......................................................................................)).
+3 AGCUUAUGAUGAUAAAACUAUUAAUGCAGAGAGUGGGCAGCUGGCAACAGUUGGCGCACGCAUGACCAGUAACUAAUCUUCUCGCUGAUGGCA .((.......................................................................................)).
+4 CCCACAUGAUGUUAAACCCAAAGUGAAAGGGAGUGCGCAUCUGGCAACAGUUGGCGCACGCAUGACCAAUAACUAAUCUUCUCGCUGAUGGA .((......................................................................................)).
+5 AAAAUGAUGAAACCUUACUUCAGGGAGUGGGCAGCUGGCAACAGUUGGCGCACGCAUGACCAGAUUCUAAUCUUCUCGCUGAUUUC .((................................................................................)).
+6 ACCAACUGAUGAAAGACACAAACUUCAUUUGGGAUUGCGCAAUUGGCAACAAUUGGCGCACGCAUGACCAUAGACUAAUCUUCUCGCUGAUGGC .((........................................................................................)).
+7 GCCACAUGACGAUUUGCUUUUUGUAAAGAGAGUGGGCAGCGGGCAACCGUUGGCCCACGAAUGACCAGUUACUAAUCUUCUCGCUGAUGGU .((.....................................................................................)).
+8 UCCAGCUGAUGACAAACCAAAUCUUCAAUGGGAUUGCGCAAUUGGCAACAAUUGGCGCACGCAUGACCAUAGACUAAUCUUCUCUCUGAUGGC .((.......................................................................................)).
+9 AGCCGAUGAUGAAAUCAACUUCAGUUUGGGAUUGCGCAAUUGGCAACAAUUGGCGCACGCAUGACCAUUGACUAAUCUUCUCUCUGAUGGCU .((......................................................................................)).

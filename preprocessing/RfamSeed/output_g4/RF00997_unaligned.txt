@@ -1,0 +1,4 @@
+0 AUUAGGAGAGUAUCUUCUCUGUUUUGGCCAUGUGUGUACUCACAGCCCCUCACACAUGGCCGAAACAGAGAAGUUACUUUCCUAAU ((((((((((((.(((((((((((((((((((((((..............))))))))))))))))))))))).))))))))))))
+1 AUUAGGAGAGUAUCUUCUCUGUUUUGGCCAUGUGUGUACUCACAGCCCCUCACACAUGGCCGAAACAGAGAAGUUACUUUCCUAA .(((((((((((.(((((((((((((((((((((((..............))))))))))))))))))))))).)))))))))))
+2 AUUAGGAGAGUACCUUCUCUGUUUUGGCCAUGGGUGUACUCACAGCCCCUCACACAUGGCCGAAACAGAGAAGUUACUUUCCUAAU ((((((((((((.(((((((((((((((((((.(((..............))).))))))))))))))))))).))))))))))))
+3 AUUAAGAGAGUACCUUCUCUGUUUUGGCCAUGUGUGUACUCACAGCCCCUCACACGUGGCCGAAACAGAGAAGGUACUUUCCUAAU ((((.(((((((.(((((((((((((((((((((((..............))))))))))))))))))))))).))))))).))))

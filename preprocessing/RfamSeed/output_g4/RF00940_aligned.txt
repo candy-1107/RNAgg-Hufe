@@ -1,0 +1,2 @@
+0 AUGCCCUCAUC-CUUGAGGGGCAUGAGGGUAGUCAGUAGCCUGAUGUCCCUCUUGAUGGCAC .((((.(((......((((((....(((.((.....)).)))....)))))).))).)))).
+1 -UGCCCUUAUAACUUGAGGGGCAUGAGGAUAGUCAGUAGUCCAACAUCCCUCUUGAUGGCAC .((((.(((......((((((.....((.((.....)).)).....)))))).))).)))).

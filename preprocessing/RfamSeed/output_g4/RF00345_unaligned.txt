@@ -1,0 +1,11 @@
+0 UGCCGUGAUGAUUGCUCGCUUAUUUCUGACACCUCUUGUAUGAGAAGUUGUUCUUUCCUCUUCCUUGGGGAUGAGGAGGAGCACUUCGCUGAGCA ((...........................................................................................))
+1 GGCGAUGAUGAUCAAUGCUUAAUUUCUGACACCUCUUGUAUGAGAAGAGCUUGAUAACCUCUUCUUUGAGCACAUUAUGCAAUACUCUGAGCC ((.........................................................................................))
+2 UGCUGUGAUGAGCAUUUGCUUACUUCUGACACCUCUUGUAUGAGAAGGGCCUCCCUUCCUUGAGCAGAUUUAGCAACCCUCUGAGCU .(...................................................................................).
+3 AGCUGUGAUGUGCACUGCUUUCUUCUGACACCUCUUGUAUGAGCAGGGACUUUGUUCCCUCCGUUGAGCAGAUUCAGCAACUCUCUGAGCU ((.......................................................................................))
+4 GGCCGUGAUGAAGAGUGCUACAUAAUUCUGACACCUCUUGUAUGAGAGGAGCUUUUCGGAGCUCUUCUUUGAGCACAUACAGCAACUCUCUGAGCC ((............................................................................................))
+5 GGCAAAGAUGAAGAGUGCUUUAUAUUUCUGACACCUCUUGUAUGAGAAGAGCUCUCAAAAAGCUCUUCUUUGAGCACAUACAGCUACUCUCUGAGCC ((.............................................................................................))
+6 GGCAAAGAUGAAGAGUGCUUCUAAUUCUGACACCUCUUGUAUGAGAAUCUCUUUCUAAGAGCUCUUCUUUGAGCACAGAUAGCAACUCUCUGAGCC ((............................................................................................))
+7 GGCGAGGAUGAAGAGUGCUAUUUAUAUUCUGACACCUCUUGUAUGAGAUGAAUCAGAGGAUUCAUCUAUGAGCACAUAAAGCAACUCUCUGAGUC ((...........................................................................................))
+8 AGCUGUGAUGAGCAUUGCUUUCUUCUGACACCUCUUGUAUGAGAAGUGCUUCUCCCAGAGAAGCUCUUCGUUGAGCAGAGUAUAGCAAUUGUCUGAGCU ((...............................................................................................))
+9 GGCGAUGAUGAUCACCACAUUCUGACACCUCUUGUACGAGACUUUGUGGCCAUUGUUCGAUGAACUCAUUAUGCAUAAGACUGAGCC ((...................................................................................))
+10 GGCAAGGAUGAUUACUGCUUAAUUUCUGACACCUCUUGUAUGAGAAGAGCUUGAUAAACUCUUCCUUGAGCACAUUAUGCAAAUACUCUGAGCC ((..........................................................................................))

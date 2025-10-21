@@ -1,0 +1,16 @@
+0 AGCUUAUCAAUGAUGUCCUAAAAAA-UAAAUGUCUGAACAUAUGACUG-CUAUAAUGAUUUCAGCAUUUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+1 AGCUUAUCAGUGAUGUUGUAAAAA--UAAAUGUCUGAACAUAUGAAUG-CAGUACUGAUUUCAGCAUUUAA-CUGAGAUAAGCG .(((((((....................................................................))))))).
+2 AGCUUAUCAGUGAUGUUGUAAAAA--UAAAUGUCUGAACAUAUGAAUG-CAGUAUUGAUUUCAGCAUUUAA-CUGAGAUAAGCG .(((((((....................................................................))))))).
+3 AGCUUAUCAAUGAUGUUGUAAAAA--UAAAUGUCUGAACAUAUGAAUU-UGAUACUGAUUUCAGCAUUUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+4 AGCUUAUCGAUGAUGUCCUAAAAG--UAAAUGUCUGAACAUAUGAAUG-CUAUACUGAUUUCAGCAUUUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+5 AGCUUAUCGGUGAUGUUGUACAAA--UAAAUGUCUGAACAUAUGAAUG-CAAUAAUGAUUUCAGCAUUUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+6 AGCUUAUCAGUGAUGUUGUAAAAA--UAAAUGUCUGAACAUAUGAAUA-ACAU--UGAUUUCAGCAUUUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+7 AGCUUAUCGGUGAUGUUGUAAAAA--UAAAUGUCUGAACAUAUGAGUA-CAAUAAUGAUUUCAGCAUCAAA-CUGAGAUGAGCU .(((((((....................................................................))))))).
+8 AGCUUAUCGGUGAUGUUCUAAAAAAAUAAAUGUCUGAACUUAUGAAUU-CAAUAUUGAUUUCAUCAUCUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+9 AGCUUGUCAGUGAUGUACUUUGAAA-AAAAUGUCUGAACAUAUGAAUU--AAUAGUGAUUUCAGCAUUUAA-CUGAGAUGAGCU .(((((((....................................................................))))))).
+10 UGCUUACCAAUGAUGCUG-AAAAA--UAAAUGUCUGAACAAAUGAUUU-CUAUA-UGAUAUCAACAUUUUCUCUGAGGUAAGCU .(((((((....................................................................))))))).
+11 AGCUUAUCUGUGAUGUUGUAAAGA--UAAAUGUCUGAACAUAUGAAUU-CGAUACUGAUUUCAGCAUUUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+12 AGCUUAUCAGUGAUGUCAUAAAAA--UAAAUGUCUGAACAUAUGAAUA-CAAUACUGAUUUCAGCAUUUGC-CUGAGAUAAGCU .(((((((....................................................................))))))).
+13 AGCUUGUCAAUGAUGUUUCUUACU--AAAAUGUCUGAACAUAUGAACU-UCAUAGUGAUUUCAGUGCAUUA-CUGAGAUAAGCU .(((((((....................................................................))))))).
+14 CUAUUAUCAGUGAUGUUGUAAAAA--UAAAUGUCUGAGCAUAUGAAUUACCAUAUUGAUUUCAGCAGUAGA-CUGAGAUUAAAA .(.(.(((....................................................................))).).).
+15 AGCUUAUCAGUGAUGCUGUACAAA--UAAAUGUCUGAACAUAUGAAUU-CAAUAUUGAUUUCAACAUAUAA-CUGAGAUAAGCU .(((((((....................................................................))))))).
