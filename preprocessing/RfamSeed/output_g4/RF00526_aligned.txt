@@ -1,8 +1,0 @@
-0 A-U-CUUAAUGAUGACUACAUUGUAAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACUAAAACAACCAAGCUGA----CAAAA-- ..(..((.............................................................................)).)..
-1 AUC-UGUUGUGAUGAAUACAUUUUAAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACCAAAAA--CCUAGCUGA-----AUUGGU ..(..((.............................................................................)).)..
-2 AUUGCCAAAUGAUGAUUACUUUUGUAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACUAUAAAAAAAUA-CUGA-----UGCAGC ..(..((.............................................................................)).)..
-3 AUC-AAAUGUGAUGAUUACUUUUGUAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACGAACAA-ACCAAACUGA-----UUUGAU ..(..((.............................................................................)).)..
-4 CGC-CAAUAUGAUGAAUACUUAUGUAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACUAUAUA--CUAAUCUGA----UUUAGAA ..(..((.............................................................................)).)..
-5 UUG-CUUAAUGAUGAUUACCUUUGUAAUUCUUGAUAGGAAGAGUAUGACACAUAAUGAGUACUAUAAA--AUUAACUGAUUCGCAAUCUU ..(..((.............................................................................)).)..
-6 CUU-UGUGGUGAUGACUACUUUGUAAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACUAAACA---AAUGUUCU----GAUUAAC ..(..((.............................................................................)).)..
-7 AUC--UUUAUGAUGACUACAUUGUAAAUUCUUGAUAGGAAGAGUAUGAAACAUAAUGAGUACUAAAACAACCAAGCUGA----CAAAGAC ..(..((.............................................................................)).)..
