@@ -112,15 +112,15 @@ def main():
                     print(f'[WARN] model for {fam} {nuc_key} {align_key} not found; skipping')
                     continue
                 # decide outfile and outdir: write into output/<category>/ with one fasta per family
-                # categories: non_unaligned, non_aligned, nuc_unaligned, nuc_aligned
+                # categories: non-nuc_unaligned, non-nuc_aligned, nuc_unaligned, nuc_aligned
                 if nuc_key == 'nuc' and align_key == 'unaligned':
                     category = 'nuc_unaligned'
                 elif nuc_key == 'nuc' and align_key == 'aligned':
                     category = 'nuc_aligned'
                 elif nuc_key == 'non-nuc' and align_key == 'unaligned':
-                    category = 'non_unaligned'
+                    category = 'non-nuc_unaligned'
                 else:
-                    category = 'non_aligned'
+                    category = 'non-nuc_aligned'
 
                 out_root = args.out_root if args.out_root else DEFAULT_OUTPUT_ROOT
                 outdir = os.path.join(out_root, category)
