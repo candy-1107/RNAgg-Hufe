@@ -1,8 +1,0 @@
-0 UCCCUUGAUGACCAAAAUAAAUUUUUACAAACUAGAGUUUCUGAAUCUUUUGUGAUUAGAACGUUUAUUCUUAUUUCUGAGG .((.............................................................................))
-1 UCCAUUGAUGACCAUGAUAAAAACAUACAAACUAGAGUUUCUGAACUUUAAUGAUUAGAAAACUGAUCAUGCAUAUCUCACUGAGG .((.................................................................................))
-2 UCCGUUGAUGACCAUAUCAAAAUAUACAAACUAGAGUUUCUGAAUUUUAAUGAUUAGGAAUUUGAUUAAAUCACUGAGG .((..........................................................................))
-3 ACUUGUGAUGACUUCAUUUCAAAAUACAAACUAGAGUUUCUGAAUAAAAAUUUAUGAUUAGAAACGAAUGCAAAUAAACUGAAG .((...............................................................................))
-4 AUCUUUGAUGACCAUUUUUUAAAAUACAAACUAGAGUUUCUGAUUAAUUUAUGAUUUCAAAUUCUUGCUGA .......................................................................
-5 UUCGUUGAUGACUCUUGAUAAACAAUACAAACUAGAGUUUCUGAACAAUCAUUUAGUAGAAUUGUUAGUGAUUAGGACAUAUCUUACUGAGG .((.......................................................................................))
-6 UCCGCUGAUGACCAAGAUUAAAUAUACAAACUAGAGUUUCUGAAUAUCUAAUGAUUAGAAAACUGAUCAUGCAUUGCAUACUGAGG .((.................................................................................))
-7 GCCGCUGAUGACCAAAGAUAUUUUACAAACUAGAGUUUCUGAUGGUCACGUGAUUAGGAACUAUCUUGCUAUCUGAGG .((.........................................................................))

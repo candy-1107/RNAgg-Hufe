@@ -1,3 +1,0 @@
-0 -GCACUAUAAUGCUGAGAG-AAGUAGCAGUUACUUUAUUCUAU-AAGUAACUGCAACAGCUCUCAGUAUUGUAAGGCUC .((..((((((((((((((...((.((((((((((.........)))))))))).))..))))))))))))))..))..
-1 UGCACU-CAAUGCUGAGAG-AAGUAGCAGUUACUUUUUACUCUUAAGUAACUGCAACAUCUCUCAGUAUUGUAAGGCUC .((..(.((((((((((((...((.((((((((((.........)))))))))).))..)))))))))))).)..))..
-2 UGCAAUGCAUUACUGAGAAUGGGUAGCAGUCACUUUGUACUAU-GAGUAACUGCAACAUCUCUCAGUAUUGUAAGGUUC .((..((((.((((((((....((.(((((.((((.........)))).))))).))...)))))))).))))..))..
