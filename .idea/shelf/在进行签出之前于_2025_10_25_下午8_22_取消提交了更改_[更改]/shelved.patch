@@ -1,0 +1,75 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"310113be-553a-4502-87fe-cc30531acb29\" name=\"更改\" comment=\"Refactor file paths and enhance batch processing script for RNA G4 analysis\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"PUSH_TAGS\">\r\n      <GitPushTagMode>\r\n        <option name=\"argument\" value=\"--follow-tags\" />\r\n        <option name=\"title\" value=\"Current Branch\" />\r\n      </GitPushTagMode>\r\n    </option>\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;candy-1107&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/candy-1107/RNAgg-Hufe.git&quot;,\r\n    &quot;accountId&quot;: &quot;bf256983-0608-4b60-9cb2-74911ada89d8&quot;\r\n  }\r\n}</component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/scripts/RNAgg_train.py\" root0=\"SKIP_INSPECTION\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 6\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"340Yh3VvVaIjV0neB1D3Vlk1y5V\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ASKED_ADD_EXTERNAL_FILES\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"f4fd956f\",\r\n    \"last_opened_file_path\": \"D:/Pycharm-projects/pythonProject/gterai-RNAgg-3b2ab96/preprocessing/Twister\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"nodejs_package_manager_path\": \"npm\",\r\n    \"settings.editor.selected.configurable\": \"preferences.pluginManager\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"D:\\Pycharm-projects\\pythonProject\\gterai-RNAgg-3b2ab96\\preprocessing\\Twister\" />\r\n      <recent name=\"D:\\Pycharm-projects\\pythonProject\\gterai-RNAgg-3b2ab96\\preprocessing\\tRNA\" />\r\n      <recent name=\"D:\\Pycharm-projects\\pythonProject\\gterai-RNAgg-3b2ab96\\preprocessing\\Aptazyme\" />\r\n      <recent name=\"D:\\Pycharm-projects\\pythonProject\\gterai-RNAgg-3b2ab96\\preprocessing\\RfamSeed\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.19416.19\" />\r\n        <option value=\"bundled-python-sdk-337b0a7a993a-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.19416.19\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"应用程序级\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"默认任务\">\r\n      <changelist id=\"310113be-553a-4502-87fe-cc30531acb29\" name=\"更改\" comment=\"\" />\r\n      <created>1760352072681</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1760352072681</updated>\r\n      <workItem from=\"1760352073964\" duration=\"391000\" />\r\n      <workItem from=\"1760352498847\" duration=\"84000\" />\r\n      <workItem from=\"1760352611375\" duration=\"3159000\" />\r\n      <workItem from=\"1760505893317\" duration=\"1623000\" />\r\n      <workItem from=\"1760601066963\" duration=\"55000\" />\r\n      <workItem from=\"1760871491857\" duration=\"3778000\" />\r\n      <workItem from=\"1760954764829\" duration=\"85000\" />\r\n      <workItem from=\"1761375618594\" duration=\"1209000\" />\r\n      <workItem from=\"1761377275613\" duration=\"639000\" />\r\n      <workItem from=\"1761377943837\" duration=\"6554000\" />\r\n      <workItem from=\"1761386686451\" duration=\"244000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"删除mxfold2\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1761374936985</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1761374936985</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"Update workspace configuration and remove mxfold2 references\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1761375729478</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1761375729478</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"Refactor file paths and enhance batch processing script for RNA G4 analysis\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1761385160664</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1761385160665</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"Refactor file paths and enhance batch processing script for RNA G4 analysis\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1761386409807</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1761386409807</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"5\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"origin/master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\r\n    <MESSAGE value=\"Revert &quot;删除mxfold2&quot;&#10;&#10;This reverts commit 0a748c1706e3821b1886799d209b112e91db4c26.\" />\r\n    <MESSAGE value=\"删除mxfold2\" />\r\n    <MESSAGE value=\"Update workspace configuration and remove mxfold2 references\" />\r\n    <MESSAGE value=\"Refactor file paths and enhance batch processing script for RNA G4 analysis\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Refactor file paths and enhance batch processing script for RNA G4 analysis\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 1d42681886cfd6b39895aa9a8f8e16575a02ddc9)
++++ b/.idea/workspace.xml	(date 1761394584576)
+@@ -5,6 +5,7 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="310113be-553a-4502-87fe-cc30531acb29" name="更改" comment="Refactor file paths and enhance batch processing script for RNA G4 analysis">
++      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -15,8 +16,8 @@
+   <component name="Git.Settings">
+     <option name="PUSH_TAGS">
+       <GitPushTagMode>
+-        <option name="argument" value="--follow-tags" />
+-        <option name="title" value="Current Branch" />
++        <option name="argument" value="--tags" />
++        <option name="title" value="All" />
+       </GitPushTagMode>
+     </option>
+     <option name="RECENT_BRANCH_BY_REPOSITORY">
+@@ -56,7 +57,7 @@
+   "keyToString": {
+     "ASKED_ADD_EXTERNAL_FILES": "true",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "f4fd956f",
++    "git-widget-placeholder": "1d426818",
+     "last_opened_file_path": "D:/Pycharm-projects/pythonProject/gterai-RNAgg-3b2ab96/preprocessing/Twister",
+     "node.js.detected.package.eslint": "true",
+     "node.js.detected.package.tslint": "true",
+@@ -102,6 +103,7 @@
+       <workItem from="1761377275613" duration="639000" />
+       <workItem from="1761377943837" duration="6554000" />
+       <workItem from="1761386686451" duration="244000" />
++      <workItem from="1761386947078" duration="1833000" />
+     </task>
+     <task id="LOCAL-00001" summary="删除mxfold2">
+       <option name="closed" value="true" />
+@@ -135,7 +137,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1761386409807</updated>
+     </task>
+-    <option name="localTasksCounter" value="5" />
++    <task id="LOCAL-00005" summary="Refactor file paths and enhance batch processing script for RNA G4 analysis">
++      <option name="closed" value="true" />
++      <created>1761387216071</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1761387216071</updated>
++    </task>
++    <option name="localTasksCounter" value="6" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -147,6 +157,11 @@
+         <entry key="MAIN">
+           <value>
+             <State>
++              <option name="CUSTOM_BOOLEAN_PROPERTIES">
++                <map>
++                  <entry key="Show.Git.Branches" value="true" />
++                </map>
++              </option>
+               <option name="FILTERS">
+                 <map>
+                   <entry key="branch">
