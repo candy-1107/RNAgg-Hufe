@@ -1,0 +1,49 @@
+<changelist name="在变基之前未提交的更改_[更改]" date="1761400152776" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/在变基之前未提交的更改_[更改]/shelved.patch" />
+  <option name="DESCRIPTION" value="在变基之前未提交的更改 [更改]" />
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00005.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00006.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00004.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00009.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00010.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00002.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00008.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00007.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="preprocessing/RfamSeed/rfam_out/rfam_stk/RF00003.stk" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+</changelist>
