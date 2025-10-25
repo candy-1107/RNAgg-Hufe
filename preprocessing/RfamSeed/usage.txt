@@ -5,3 +5,16 @@ python _makeRfamSeedSto.py RF00001 Rfam.seed > RF00001.stk
 
 # The following command creates unaligned and aligned training data.
 python _make_input_consG4.py RF00001.stk RF00001_unaligned.txt RF00001_aligned.txt
+
+# Batch processing example (outputs for all families):
+# .stk files will be saved under rfam_out/rfam_stk
+# Unaligned files will be saved under rfam_out/rfam_unaligned
+# Aligned files will be saved under rfam_out/rfam_aligned
+python batch_rfam_g4.py --seed Rfam.seed --output_stk rfam_out --output_g4 rfam_out
+
+# Optionally, override unaligned/aligned folders explicitly
+python batch_rfam_g4.py --seed Rfam.seed ^
+	--output_stk rfam_out ^
+	--output_g4 rfam_out ^
+	--output_unaligned rfam_out_custom/unaligned ^
+	--output_aligned rfam_out_custom/aligned

@@ -1,7 +1,13 @@
 import sys
 import os
 import argparse
-sys.path.append(os.environ['HOME'] + "/pyscript")
+# sys.path.append(os.environ['HOME'] + "/pyscript")
+# Cross-platform: prefer HOME, fall back to USERPROFILE on Windows; append ~/pyscript only if it exists
+_home = os.environ.get('HOME') or os.environ.get('USERPROFILE')
+if _home:
+   _p = os.path.join(_home, 'pyscript')
+   if os.path.isdir(_p) and _p not in sys.path:
+        sys.path.append(_p)
 #sys.path.append("Users/terai/RNAVAE")
 #import basic
 import pickle
@@ -48,7 +54,7 @@ def main(args: dict):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(device, file=sys.stderr)
-    
+
     # モデルの初期化とロード
     #checkpoint = torch.load(args.model, weights_only=True)
     checkpoint = torch.load(args.model, map_location=torch.device(device))
@@ -483,11 +489,12 @@ def TraceBack(st_ini, pos_ini, TR, TB, seq, ss):
 
 
 def outputScoreMatrix(score, png_name):
-    #s = score.shape
-    #if s[0] != s[1]:
-    #    print(f"Input matrix is not square ({s[0]}x{s[1]})", file=sys.stderr)
-    #    exit(0)
-                    
+    # Lazy import seaborn to avoid hard dependency; fail gracefully if seaborn is missing
+    try:
+        import seaborn as sns
+    except Exception:
+        print('seaborn not installed; cannot draw score matrix {0}'.format(png_name), file=sys.stderr)
+        return
     sns.heatmap(score)
     plt.savefig(png_name)
     plt.close()
@@ -531,5 +538,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
-
-    

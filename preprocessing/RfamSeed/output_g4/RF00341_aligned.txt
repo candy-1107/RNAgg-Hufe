@@ -1,4 +1,0 @@
-0 GUACAUGUGAUGA-AGCAAAUCAGUAUGAAUAAA---AUGAUACUGUAAACGCUUUCUGAUGUA .((((......((.(((....((((((.............)))))).....)))))....))))
-1 GUGCAUGUGAUGA-AGCAAAUCAGUAUGAAUGAAUUCAUGAUACUGUAAACGCUUUCUGAUGUA .((((......((.(((....((((((.............)))))).....)))))....))))
-2 -UGCAUAUGAUGA-AGCAAAUCAGUAUGAGUAAAAUCAUGAUACUGUAAACGCUUUCUGAUGCA .((((......((.(((....((((((.............)))))).....)))))....))))
-3 GCAUAUAUGAUGUGAACGAAACAGUAUGAG--AAUCUGUGAUACUGUAAACGCUUUCUGAUGUG .((((......(..(.(....((((((.............)))))).....).).)....))))

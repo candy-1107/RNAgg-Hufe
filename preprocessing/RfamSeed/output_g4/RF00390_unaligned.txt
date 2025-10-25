@@ -1,4 +1,0 @@
-0 UAAGUUCUCGAUCUUUAAAAUCG ........((((.......))))
-1 UAAGUUCUCGAUCUCUAAAAUCG ........((((.......))))
-2 UGAGUUCUCGAUCUCUAAAAUCG ........((((.......))))
-3 UGAGUUCUCUAUCUCUAAAAUCG ........(.((.......)).)
