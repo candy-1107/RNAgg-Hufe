@@ -4,42 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="310113be-553a-4502-87fe-cc30531acb29" name="更改" comment="Add initial project files and scripts for RNA secondary structure prediction&#10;&#10;- Create vcs.xml for version control settings&#10;- Update requirements.txt to include charset-normalizer&#10;- Add example RNA sequences in example.fa&#10;- Implement various Python scripts for data processing and analysis&#10;- Introduce utils_gg.py for utility functions and encoding detection&#10;- Add batch processing script for RNA secondary structure prediction&#10;- Include mxfold2_predict.py for lightweight RNA structure prediction">
-      <change afterPath="$PROJECT_DIR$/mxfold2/seq.fa" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mxfold2/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/mxfold2/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mxfold2/USAGE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mxfold2/USAGE.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mxfold2/batch_predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/mxfold2/batch_predict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mxfold2/predict_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/mxfold2/predict_structure.py" afterDir="false" />
-    </list>
+    <list default="true" id="310113be-553a-4502-87fe-cc30531acb29" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
-    <envs>
-      <env key="FLASK_APP" value="app" />
-    </envs>
-    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
-    <option name="myEnvs">
-      <map>
-        <entry key="FLASK_APP" value="app" />
-      </map>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {}
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/candy-1107/RNAgg-Hufe.git&quot;,
-    &quot;accountId&quot;: &quot;bf256983-0608-4b60-9cb2-74911ada89d8&quot;
-  }
-}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/scripts/RNAgg_train.py" root0="SKIP_INSPECTION" />
   </component>
@@ -47,35 +17,28 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="340Yh3VvVaIjV0neB1D3Vlk1y5V" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/Pycharm-projects/pythonProject/gterai-RNAgg-3b2ab96/mxfold2",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Pycharm-projects/pythonProject/gterai-RNAgg-3b2ab96/preprocessing/Twister&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\mxfold2" />
-      <recent name="D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\preprocessing\Aptazyme" />
       <recent name="D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\preprocessing\Twister" />
       <recent name="D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\preprocessing\tRNA" />
+      <recent name="D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\preprocessing\Aptazyme" />
       <recent name="D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\preprocessing\RfamSeed" />
     </key>
   </component>
@@ -102,55 +65,10 @@
       <workItem from="1760601066963" duration="55000" />
       <workItem from="1760871491857" duration="3778000" />
       <workItem from="1760954764829" duration="85000" />
-      <workItem from="1761022250810" duration="2832000" />
-      <workItem from="1761034175182" duration="3067000" />
-      <workItem from="1761123587811" duration="2209000" />
-      <workItem from="1761189813942" duration="27000" />
-      <workItem from="1761219161601" duration="860000" />
-      <workItem from="1761220045245" duration="110000" />
-      <workItem from="1761223033600" duration="4216000" />
-      <workItem from="1761244646657" duration="1277000" />
     </task>
-    <task id="LOCAL-00001" summary="Add initial project files and scripts for RNA secondary structure prediction&#10;&#10;- Create vcs.xml for version control settings&#10;- Update requirements.txt to include charset-normalizer&#10;- Add example RNA sequences in example.fa&#10;- Implement various Python scripts for data processing and analysis&#10;- Introduce utils_gg.py for utility functions and encoding detection&#10;- Add batch processing script for RNA secondary structure prediction&#10;- Include mxfold2_predict.py for lightweight RNA structure prediction">
-      <option name="closed" value="true" />
-      <created>1761223816416</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1761223816416</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/master" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Add initial project files and scripts for RNA secondary structure prediction&#10;&#10;- Create vcs.xml for version control settings&#10;- Update requirements.txt to include charset-normalizer&#10;- Add example RNA sequences in example.fa&#10;- Implement various Python scripts for data processing and analysis&#10;- Introduce utils_gg.py for utility functions and encoding detection&#10;- Add batch processing script for RNA secondary structure prediction&#10;- Include mxfold2_predict.py for lightweight RNA structure prediction" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add initial project files and scripts for RNA secondary structure prediction&#10;&#10;- Create vcs.xml for version control settings&#10;- Update requirements.txt to include charset-normalizer&#10;- Add example RNA sequences in example.fa&#10;- Implement various Python scripts for data processing and analysis&#10;- Introduce utils_gg.py for utility functions and encoding detection&#10;- Add batch processing script for RNA secondary structure prediction&#10;- Include mxfold2_predict.py for lightweight RNA structure prediction" />
   </component>
 </project>
