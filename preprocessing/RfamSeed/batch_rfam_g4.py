@@ -128,10 +128,7 @@ def main():
         ali_path = os.path.join(ali_dir, f"{fam_id}_aligned.txt")
 
         # Step 1: generate .stk file using _makeRfamSeedSto.py
-        # Ensure we pass absolute paths to subprocess so the helper script can locate files
-        seed_arg = os.path.abspath(args.seed) if not os.path.isabs(args.seed) else args.seed
-        stk_path_abs = os.path.abspath(stk_path)
-        cmd_sto = [sys.executable, "_makeRfamSeedSto.py", fam_id, seed_arg, "--out_stk", stk_path_abs]
+        cmd_sto = [sys.executable, "_makeRfamSeedSto.py", fam_id, args.seed, "--out_stk", stk_path]
         print(f"Generating {stk_path} ...")
         subprocess.run(cmd_sto, cwd=script_dir, check=True)
 
@@ -152,11 +149,7 @@ def main():
                 if not args.only_filter:
                     out_una = os.path.join(una_dir, f"{fam_id}_{args.target}_unaligned.txt")
                     out_ali = os.path.join(ali_dir, f"{fam_id}_{args.target}_aligned.txt")
-                    # use absolute paths for helper call
-                    stk_target_abs = os.path.abspath(stk_target)
-                    out_una_abs = os.path.abspath(out_una)
-                    out_ali_abs = os.path.abspath(out_ali)
-                    cmd_g4 = [sys.executable, "_make_input_consG4.py", stk_target_abs, out_una_abs, out_ali_abs]
+                    cmd_g4 = [sys.executable, "_make_input_consG4.py", stk_target, out_una, out_ali]
                     print(f"Generating G4 files for {fam_id} (target {args.target}) ...")
                     subprocess.run(cmd_g4, cwd=script_dir, check=True)
                     print(f"Generated {out_una} and {out_ali}")
@@ -165,8 +158,7 @@ def main():
         else:
             # no filtering requested: run original behaviour
             print(f"Generating G4 files for {fam_id} ...")
-            # pass absolute paths to helper script
-            subprocess.run([sys.executable, "_make_input_consG4.py", stk_path_abs, os.path.abspath(una_path), os.path.abspath(ali_path)], cwd=script_dir, check=True)
+            subprocess.run([sys.executable, "_make_input_consG4.py", stk_path, una_path, ali_path], cwd=script_dir, check=True)
 
         processed += 1
 
