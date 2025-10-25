@@ -1,0 +1,15 @@
+0 CUCCUGUCUG--AUGAUGA-GCCCAU-UGCC-CUGAGCUCUUGUGAUG-CUGGCUUCAAAGUAAACGCUCUGAAGUGAAGGAGCA--GGGC ..(((..((........................................................................))....))).
+1 CCCCUAUCUCUCAUGAUGA-ACACAUAUGCCUCUGAGCUGCUGUGAUUUCUGGCUUCAAAGUAAACGCUCUGAAG---AAGAGAU--GGGG .((((.((((......................................................................))))...))))
+2 CUCCCCGCUCUCAUGAUGA-GCCCAUGUGCCUCUGAGCUGCCGUGAUU-CAGGCUUCAAAGUAAACGCUCUGAAGAAAUGGAGCC--GAGC ..(.(.((((......................................................................))))...).).
+3 CUCCCAGCUCUCAUGAUGA-ACCCAUAUGCCUCUGAGCUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGAUGGAGCA--GAGG .((.(.((((......................................................................))))...).))
+4 CCCCCAACUCUCACGAUGA-ACCCAUAUGCCUCUGAGUUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGAUGGGGCG--GAGG .((.(..(((......................................................................)))....).))
+5 CCCCCAUCUCUCAGGAUGA-GCCCCUCUGCCUCUGAGCUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAA------GAGAG--GGGG .((((.((((......................................................................))))...))))
+6 UCCUUGUCUCUCAUGAUGA-AACCCUGUGCCUCUGAGCUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGACAG-GCA--GAGG .((((..(.(......................................................................).)....))))
+7 CUGCCAGCUCUCAUGAUGA--CCCUUGUGCCUCUGAGCUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGAUAG-GCAGUGGUC ..(((.((.(......................................................................).))...))).
+8 UCCCCAAGUCUAAUGAUGAUACCCAAUUUCCUCUGAGCCACUGUUAUU-CUGGCUUCAAAGUAAAUGCUCUGAUG----AGA--U--GGGG .((((...((......................................................................)).....))))
+9 CCCCCAGCUCUGGUGAUGA-ACCCACGUGCCUCUGAGCUGUCGUGAUU-UUGGCUUCAAAGUAAACGCUCUGAAGAGAUGGGGCA--GAAG .(..(.((((......................................................................))))...)..)
+10 GCCCCAUCUCUCAGGAUGA-ACCCCA-CGCCUCUGAGCCUCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGAC-GGGCA--GAGG .((.(..(((......................................................................)))....).))
+11 UUCCCAGCUCUCGUGAUGA-CUCCAUGUGCCUCUGAGCUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGAU-GGGCA--GAGG .((.(.((((......................................................................))))...).))
+12 CCCCCGUCUCUUAUGAUGA-ACCCAUUUGCUUCUGAGCUGCUGUGAUUUUUGGCUUCAAAGUAAACGCGCUGAAG---AAGAGUU--GGGA ..(((..(((......................................................................)))....))).
+13 CUCCUGUCUC--AUGAUGA-UCCCCACUGCC-CUGAGCUGUUGUGAUG-CAGGCUUCAAAGUAAACGCUCUGAAGCAAUGGAGCA--AGGC ..(((..(((......................................................................)))....))).
+14 CCCCCAGCUCUCUUGAUGA-ACCCAUGUGCCUCUGAGCUGCCAUGAUU-CUGGCUUCAAAGUAAACGCUCUGAAGAGAUGGGGCA--AAGG .((...((((......................................................................)))).....))

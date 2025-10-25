@@ -1,0 +1,4 @@
+0 UUGUGACCGUUGUUACGGUCAAUUCAU-GUCUGACACAAUGACCGUAAUCCCGUUCACAACA ((((((.((..((((((((((..................))))))))))..)).))))))..
+1 UUGUGACCGUUGUUACGGUCAUUUCA--ACAUGUAAC--UGACCGUAAUCCCGUUCACAACA ((((((.((..((((((((((..................))))))))))..)).))))))..
+2 UUGUGACCGUUGUUACGGUCAAUUUGCAAAUUGAAAAAAUGACCGUAAUCCCGUUCACAAUA ((((((.((..((((((((((..................))))))))))..)).))))))..
+3 UUGUGACCGUUGUUACGGUCAAUUU-CAUUCAGAAGCUAUGACCGUAAUCCCGUUCACAACA ((((((.((..((((((((((..................))))))))))..)).))))))..

@@ -1,0 +1,14 @@
+0 UGAUGCCUAUGAUGACUUGCAAGAUUAUUGCCUACAUUGUUUGACAAGUAUCUUUGUGAUAUUAAUUGCAAGUACCUGAGGCUUGA (...(((........................................................................)))...)
+1 CGUCUGUGAUGUUCUGCUAUUACCUACAUUGUUUGAGCCUCAUGAAAACCCCACUGGCUGAGACGC ((((.........................................................)))).
+2 CGUCUGUGAUGUUCUGCUAUUACCUACAUUGUUUGAUGCUCAUGAAAGAACCACUGGCUGAGACGC ((((.........................................................)))).
+3 UUUACCUAUGAUGAGUUGCGAAAUUUAUUGCCUACAUUGUUUGAUUAACCUGUGAGAAAAUUUGCAACAUCUGAGGAUAAA ((.(((....................................................................)).).))
+4 UUUACCUAUGAUGAGUUGUGAAAUUUAUUGCCUACAUUGUUUGACUAACCUGUGAGAAAAUUUGCAACAUCUGAGGAUAAA ((.(((....................................................................)).).))
+5 UUCUGCCAAUGAUGAGUUGCAACAUUAUUGCCUACAUUGUUUGACAAACAAAUUCAUGAUAAAAAAGCAACAACUGAGGCUUAA ((..(((......................................................................)))..))
+6 CGUCCAUGAUGUUCCGCAACUACCUACAUUGUUUGAUCCUCAUGAAAGCAGCACUGGCUGAGACGC ((((.........................................................)))).
+7 UUUAACCUAUGAUGAGUUGCAAAAUUUAUUGCCUACAUUGUUUGACUAACCUGUGAGAAACAAUUGCAACAUCUGAGGAUAAA ((.(.((.....................................................................)).).))
+8 CUCUGCUUAUGAUGAGUUGCAAUAUCUUUUGCCUACAUUGUCUGACAAAUGUUGUCAUGAUAAUAUUUGCAACCUCUGAGGCAUAA .(.((((........................................................................)))).).
+9 UCUGUGAUGUUCUGCUAUUACCUACAUUGUUUGAGCCUCAUGAAAACCCCACUGGCUGAGA ((.........................................................))
+10 UGGCGUCCAUGAUGUUCCGCAACUACCUACAUUGUUUGAUCCUCAUGAAAGCAGCACUGGCUGAGACGCCA ((.((((.........................................................)))).))
+11 AAGGCCUAUGAUGAUUCAAAUUUUGCCUACAUUGUUUGAUAAACCAAUGAUAUAACUUGUACAAAAUGUUUUCUGAGGCCUU (.((((......................................................................)))).)
+12 CGUCCGUGAUGUUCCGCGAUUACCUACAUUGUUUGAUCCUCAUGAAAACAGCACUGGCUGAGACG ((((.........................................................))))
+13 AGGGCCGAUGAUGCUGUUCAAUUACCUACAUUGUUUGAUUUUCCUGUGAGAAAACAGCUAUAUCUGAGGCCCCU ((((((.............................................................)))).))

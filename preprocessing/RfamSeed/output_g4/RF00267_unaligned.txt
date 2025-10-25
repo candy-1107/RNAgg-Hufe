@@ -1,0 +1,14 @@
+0 AAAAAGCAAUUAGGAAUCAUGAAAACGUUCGCAUGUCAGACUUCAGAGAUGCCAUGGCAUUAAUGAGAAGAUGUUUUCAUUUUCUGAGCUUAUA .(.((((........................................((((......))))..........................)))).).
+1 AAAAAGCAAUGAGGAAUCAUGAAAACUUUCGCAUGUCAGACUUCAGAGAUGCCAUGGCAUUAAUGAGAAGAUGUUUUCAUUUUCUGAGCUUAUA .(.((((........................................((((......))))..........................)))).).
+2 AAAAAUGCUAUGAGGAAUCAUGAAAACUUUCGCAUGUCAGACUUCAGAGAUGCCAUGGCAUCAAUGAGAAGAUGUUUUCAUUUUCUGAGCUUAUA .(.((...........................................((((......))))............................)).).
+3 AAAAUGCUAUGAGGAAUCAUGAAAACUUUCGCAUGUCAGACUUCAGAGAUGCCAUGGCAUCAAUGAGAAGAUGUUUUCAUUUUCUGAGCUU ((...((........................................((((......))))..........................))))
+4 UUGUUGCGAGGAUGAAUUAUGAACAAACUUCGCAUGUCAGACUUCGGAGAUGCUUCAAAGCAUCCAUGAGAAGACAUGUCAUACGACUGAGCAA ...((((.........................................((((........))))..........................))))
+5 GUAUUGCUGUGAUGAAUUAAGAAAAAUUUCACAUGUCAGACUUCAGAGAUUUUUAUAAUCAAUGAGAAUGACAAUUCUUAAUUUCUGAGCUGGAU ((.(.((........................................((((.....))))............................)).).))
+6 CUUCUGCUGUGAUGAUCUUUUGAAUAAAAUUCACAUGUCAGACUUCAGAGAUCUUUUGAUCUAUGAGAAAAAACAUUCAUAAUUCUGAGCAGAAG (((((((..........................................((((....))))...........................)))))))
+7 CUUCUGCGGUGAUGAUUUUAUGAGAAAUUCACAUGUCAGACUUCAGAGAUUCUUGUAAUCUAUGAGAAUAAAUUCAUAUAUCUGAGCAGAAG (((((((........................................((((.....)))).........................)))))))
+8 UUUUUGUGGUGAUAAUUAUAGAAGAAAAUUCACAUCUCAGACUUUAGAGAUUUUCAUGAUCAAUGAGAAUGUCAAUUCUUAUUCGCAAAGCAAAAA (((((((.........................................((((.....))))............................)))))))
+9 UUUCUGCAGUGAAGAAUGAAGAAGAAAAUUCACAUGUUAGACUCUAGAGAUUUUUAUGAUCAAUGAGAAUGGCAACUUAUUCACUAAGCAGAAA (((((((.........................................((((.....))))..........................)))))))
+10 CUUCUGCGGUGAUGAAUUUAUGAAAACCAAUUCACAUGUCAGACUUCAGAGAUUCUUCAAUCAAUGAGAAGAAAUUUCAUACUUCUGAGCAGAAG (((((((...........................................((((....))))..........................)))))))
+11 CUUGUGCUAUGAUGAUCUUUUGAAUAAAAUUCACAUGUCAGACUUCAGAGAUUCUUCUAAUUAAGAAUCCAUGAGAAUAAAUAUUCAUAAUUCUGAGCACAAG (((((((..........................................((((............))))...........................)))))))
+12 CUUCUGCAGUGAUGAAGUCAUGGAGUAAGAUCCACAUGUCAGACUUCAGAGAUUUUUAAUCGAUGAGAAGAGACUUCCAUAACUUCUGAGCAGAAU .((((((...........................................((((...))))............................)))))).
+13 CUUCUGCGAUGAUGAAGUAUGAAAACAAUUCACAUGUCAGACUUCAGAGAUUUUUAAAAAUCUAUGAGAAGAAAAUUCAUAUUUUCUGAGCAGAAG (((((((.........................................((((......))))...........................)))))))

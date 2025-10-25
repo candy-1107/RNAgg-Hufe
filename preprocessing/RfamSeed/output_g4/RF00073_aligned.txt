@@ -1,0 +1,10 @@
+0 GUGACAGAAGAGAGUGAGCACACGGCCGGGC---GUGACGGCACCGGCGGGCG-UGCCGU---CGCGG-------CCGCGUGCUCACUGCUCUUUCUGUCAU (((((((((((((((((((((.(((..................................................))).))))))))).))).)))))))))
+1 GCGACAGAAGAGAGUGAGCACACAU---GGCU--CUUUU--------UCUAGCAUGCUCA---UGCUCGAAAGCUCUGCGUGCUUACU-CUCUUCUUGUCUC (.(((((.(((((((((((((.((....................................................)).))))))))).))).).))))).)
+2 CUGACAGAAGAGAGUGAGCACACACGGUGCUUU-CUUA--------GCAUGCAAGAGCCA---UGCUGGGA-GCUGUGCGUGCUCACU-CUCUAUCUGUCAG ((((((((.((((((((((((.(((..................................................))).))))))))).)))..))))))))
+3 GUGACAGAAGAGAGUGAGCACACGUGGUUGUUUCCUUGC-------AUAAAUGAUGCCUA---UGCUUGGA-GCUACGCGUGCUCACUUCUCUCUCUGUCAC ((((((((.((((((((((((.(((..................................................))).))))))))).)))..))))))))
+4 GUGACAGAAGAGAGUGAGCACACAUGGUGGCUUUCUUGC-------AUAU-UUGAAGGUUCCAUGCUUGAA-GCUAUGUGUGCUCACU-CUCUAUCCGUCAC (((((.((.((((((((((((.(((..................................................))).))))))))).)))..)).)))))
+5 GUGACAGAAGAGAGUGAGCACACAUGGUGGUUU-CUUGCAUGCUU-UUUUGAUUAGGGUUUCAUGCUUGAA-GCUAUGUGUGCUUACU-CUCUCUCUGUCAC ((((((((.((((((((((((.(((..................................................))).))))))))).)))..))))))))
+6 CUGACAGAAGAGAGUGAGCACACAUGGUGACUUUCUUGC-------AUGCUGAAUGGACUCA-UGCUUGAA-GCUAUGUGUGCUCACUUCUCUCUCUGUCAG ((((((((.((((((((((((.(((..................................................))).))))))))).)))..))))))))
+7 CUGACAGAAGAGAGUGAGCACAUGCAGGCACU--GUUAU-------GUGU-CUAUAACUU---UGCGU-------GUGCGUGCUCACCUCUCUUUCUGUCAG ((((((((((((.((((((((.(((..................................................))).))))))))..))).)))))))))
+8 UUGACAGAAGAGAGUGAGCACACAAAGGGGAA--GUUGUAUAAAA-GUUUUGUAUAUGGU---UGCUU-------UUGCGUGCUCACU-CUCUUUUUGUCAU .((((((((((((((((((((.(((..................................................))).))))))))).))).)))))))).
+9 CUGACAGAAGAGAGUGAGCACACAAAGGCACU---UUGC-------AUGUUCGAUGCAUU---UGCUUCUC----UUGCGUGCUCACUGCUCUAUCUGUCAG ((((((((.((((((((((((.(((..................................................))).))))))))).)))..))))))))

@@ -1,0 +1,3 @@
+0 CAACAGCGAAGCGGAACGGCGAAACACACCUUGUGUGGUAUAUUACCCGUUG ..............(((((.......(((.....))).........))))).
+1 AAACAGAGAAGUCAACCAGAGAAACACACGUU--GUGGUAUAUUACCUGGUA ..............(((((.......(((.....))).........))))).
+2 CAACAGCGAAGCGCGCCAGGGAAACACACCAUGUGUGGUAUAUUAUCUGGCA ..............(((((.......(((.....))).........))))).
