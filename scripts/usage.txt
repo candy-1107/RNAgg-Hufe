@@ -1,0 +1,54 @@
+# Usage notes for scripts/ (style similar to preprocessing/*/usage.txt)
+
+# NOTE: 以下命令假定你在 PowerShell 中、当前工作目录为仓库的 `scripts` 目录。
+# 例如：在 PowerShell 中运行：
+# cd D:\Pycharm-projects\pythonProject\gterai-RNAgg-3b2ab96\scripts
+
+# 1) Train a single family (example: non-nuc unaligned input)
+# Input should be a txt file produced by preprocessing (e.g. RF00001_unaligned.txt)
+# Basic invocation (PowerShell, run inside `scripts`):
+python RNAgg_train.py ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned\RF00001_unaligned.txt --out_dir ..\results\RF00001\non-nuc\unaligned --model_fname model_RF00001_non-nuc_unaligned.pth --png_prefix RF00001_non-nuc_unaligned_ --epoch 200 --d_rep 8
+# To train nuc-only model, add --nuc_only
+# Example (smoke test, small epoch):
+python RNAgg_train.py ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned\RF00001_unaligned.txt --out_dir ..\results\RF00001\non-nuc\unaligned --model_fname model_RF00001_non-nuc_unaligned.pth --png_prefix RF00001_non-nuc_unaligned_ --epoch 5 --d_rep 8
+
+# 2) Batch train multiple families (4 combinations per family: non-nuc/nuc x aligned/unaligned)
+# Use the helper batch script (dry-run by default: it prints commands)
+# Dry-run (prints commands for first 10 families discovered under aligned/unaligned dirs):
+python run_batch_rfam_train.py --aligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_aligned --unaligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned --n 10
+# Real run (execute training):
+python run_batch_rfam_train.py --aligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_aligned --unaligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned --n 10 --dry_run False --epoch 200
+
+# 3) Generate sequences from a single trained model
+# Basic invocation (generate 100 sequences and output fasta). Run inside `scripts`:
+python RNAgg_generate.py 100 ..\results\RF00001\non-nuc\unaligned\model_RF00001_non-nuc_unaligned.pth ..\output\non-nuc_unaligned\RF00001.fasta --s_bat 100 --n_cpu 1 --out_fasta
+# Notes: if the model is "nuc-only" the generator will behave accordingly. Use --from_emb when supplying embeddings file instead of a number.
+
+# 4) Batch generate for many models (defaults to dry-run)
+# Dry-run (first 10 families in models_root). Run inside `scripts`:
+python run_batch_rfam_generate.py --models_root ..\results --out_root ..\output --n_families 10 --num 100
+# Real run:
+python run_batch_rfam_generate.py --models_root ..\results --out_root ..\output --n_families 10 --num 100 --dry_run False
+# This writes fasta into ..\output\<category>\ where <category> is one of:
+#   non-nuc_unaligned, non-nuc_aligned, nuc_unaligned, nuc_aligned
+# Each family produces one fasta file named <family>.fasta in the respective category folder.
+
+# 5) Organize results into four category folders and collect up to N families per category
+# Dry-run (shows planned copy/move operations). Run inside `scripts`:
+python organize_results_by_category.py --models_root ..\results --dest_root ..\final_output --n_per_category 10
+# Real run (copy):
+python organize_results_by_category.py --models_root ..\results --dest_root ..\final_output --n_per_category 10 --dry_run False
+# To move instead of copy:
+python organize_results_by_category.py --models_root ..\results --dest_root ..\final_output --n_per_category 10 --copy_mode move --dry_run False
+# To overwrite existing destination folders add --overwrite
+
+# 6) Tips and cautions
+# - Always run scripts with the default dry-run option first (where provided) to inspect commands.
+# - Ensure preprocessing has produced the expected txt inputs under:
+#     preprocessing\RfamSeed\rfam_out\rfam_aligned\
+#     preprocessing\RfamSeed\rfam_out\rfam_unaligned\
+# - Training saves models under results\<family>\<nuc|non-nuc>\<aligned|unaligned>\; generator and organizer scripts expect this structure.
+# - Check logs in each output folder (train.log, generate_*.log) for errors when running real jobs.
+# - Adjust --epoch, --d_rep, --num, --s_bat, --n_cpu according to your resources.
+
+# End of usage
