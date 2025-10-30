@@ -18,10 +18,16 @@ Thumbs.db
 # Jupyter
 *.ipynb_checkpoints/
 
+
 # Others
 *.log
 *.tmp
 *.bak
+*.pth
+*.zip
+*.tar
+*.gz
+*.rar
 
 # Data
 *.csv
