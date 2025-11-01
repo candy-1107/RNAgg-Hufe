@@ -252,9 +252,17 @@ def checkArgs(args): # プログラムごとにオプションが異なるため
             print(f"args.png_prefix({args.png_prefix}) should not contain '/'.", file=sys.stderr)
             exit(0)
                 
-    if not os.path.exists(args.out_dir) or not os.path.isdir(args.out_dir):
-        print(f"args.out_dir({args.out_dir}) does not exist.", file=sys.stderr)
-        exit(0)
+    # Ensure output directory exists; create it if missing so batch scripts don't fail.
+    try:
+        if not os.path.exists(args.out_dir):
+            os.makedirs(args.out_dir, exist_ok=True)
+            print(f"Created output directory: {args.out_dir}", file=sys.stderr)
+        elif not os.path.isdir(args.out_dir):
+            print(f"args.out_dir({args.out_dir}) exists but is not a directory.", file=sys.stderr)
+            exit(1)
+    except Exception as e:
+        print(f"Cannot create or access args.out_dir({args.out_dir}): {e}", file=sys.stderr)
+        exit(1)
 
 
 if __name__ == '__main__':

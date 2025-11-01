@@ -23,10 +23,12 @@ import sys
 import subprocess
 from typing import List
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_SCRIPT = os.path.join(SCRIPT_DIR, 'RNAgg_train.py')
+
 DEFAULT_ALIGNED_DIR = os.path.join('preprocessing', 'RfamSeed', 'rfam_out', 'rfam_aligned')
 DEFAULT_UNALIGNED_DIR = os.path.join('preprocessing', 'RfamSeed', 'rfam_out', 'rfam_unaligned')
-DEFAULT_SCRIPT = os.path.join('scripts', 'RNAgg_train.py')
-DEFAULT_OUTROOT = 'results'
+DEFAULT_OUTROOT = '../results'
 
 SUFFIXES = {
     'unaligned': '_unaligned.txt',
@@ -115,10 +117,21 @@ def main():
     parser.add_argument('--beta', type=float, default=0.001, help='beta')
     parser.add_argument('--act_fname', default=None, help='optional activity file to enable act model')
     parser.add_argument('--python_exe', default=sys.executable, help='python executable to run training script')
+    parser.add_argument('--use_gpu', action='store_true', help='set CUDA_VISIBLE_DEVICES for subprocess to request GPU')
+    parser.add_argument('--gpu_id', default='0', help='GPU id to set in CUDA_VISIBLE_DEVICES (default: 0)')
     parser.add_argument('--dry_run', type=lambda x: (str(x).lower() not in ('0','false')), default=True,
                         help='if True (default) only print commands; set to False to actually run')
 
     args = parser.parse_args()
+
+    # Ensure input and output directories exist (create if missing)
+    for _dir in (args.aligned_dir, args.unaligned_dir, args.out_root):
+        try:
+            if _dir:
+                os.makedirs(_dir, exist_ok=True)
+        except Exception:
+            # If creation fails, continue and let later checks/reporting handle it
+            pass
 
     # determine families
     if args.families:
@@ -157,16 +170,32 @@ def main():
                                     args.epoch, args.d_rep, args.save_ongoing, args.lr, args.beta, nuc_only, args.act_fname)
                 # log path
                 log_path = os.path.join(outdir, 'train.log')
+
+                # prepare env for subprocess; allow user to request a specific GPU
+                env = os.environ.copy()
+                if args.use_gpu:
+                    env['CUDA_VISIBLE_DEVICES'] = args.gpu_id
+                # Workaround for OpenMP duplicate runtime errors (intel MKL / OpenMP conflicts).
+                # This allows the subprocess to continue even when multiple OpenMP runtimes are loaded.
+                # It's an unsafe workaround but safer than failing the entire batch; recommend proper fix
+                # (use consistent BLAS/OpenMP builds) for production.
+                env.setdefault('KMP_DUPLICATE_LIB_OK', 'TRUE')
+                # Limit number of threads used by OpenMP/MKL inside subprocess to reduce resource contention.
+                env.setdefault('OMP_NUM_THREADS', '1')
+                env.setdefault('MKL_NUM_THREADS', '1')
+
                 if args.dry_run:
-                    print('DRY:', ' '.join(cmd))
+                    gpu_msg = f" [GPU: {args.gpu_id}]" if args.use_gpu else ""
+                    print(f"DRY: {' '.join(cmd)}{gpu_msg}")
                     print('  -> log:', log_path)
                 else:
-                    print('RUN:', ' '.join(cmd))
+                    gpu_msg = f" [GPU: {args.gpu_id}]" if args.use_gpu else ""
+                    print(f"RUN: {' '.join(cmd)}{gpu_msg}")
                     print('  -> log:', log_path)
                     with open(log_path, 'w', encoding='utf-8') as logf:
                         try:
-                            # run and redirect stdout/stderr to log file
-                            proc = subprocess.run(cmd, stdout=logf, stderr=subprocess.STDOUT, check=True)
+                            # run and redirect stdout/stderr to log file, passing the env
+                            proc = subprocess.run(cmd, stdout=logf, stderr=subprocess.STDOUT, check=True, env=env)
                         except subprocess.CalledProcessError as e:
                             print(f'[ERROR] training failed for {fam} {nuc_key} {align_key}: returncode={e.returncode}', file=sys.stderr)
                             # continue to next combination

@@ -85,6 +85,15 @@ def main():
 
     args = parser.parse_args()
 
+    # Ensure models root and output root exist (create if missing)
+    for _dir in (args.models_root, args.out_root):
+        try:
+            if _dir:
+                os.makedirs(_dir, exist_ok=True)
+        except Exception:
+            # If creation fails, continue and let later checks/reporting handle it
+            pass
+
     if args.families:
         families = [f.strip() for f in args.families.split(',') if f.strip()]
     else:
