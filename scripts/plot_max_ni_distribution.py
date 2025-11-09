@@ -77,7 +77,7 @@ VARIANTS = {
     'RNAgg-una': 'non-nuc_unaligned',
     'nuc-ali': 'nuc_aligned',
     'RNAgg-ali': 'non-nuc_aligned',
-    'RfamGen': 'RfamGen',  # optional; will be ignored if not present
+    # 'RfamGen': 'RfamGen',  # optional; will be ignored if not present
 }
 
 # Colors tuned to roughly match the example figure
@@ -86,7 +86,7 @@ PALETTE = {
     'RNAgg-una': '#ffffb3',
     'nuc-ali': '#bebada',
     'RNAgg-ali': '#fb8072',
-    'RfamGen': '#FDB462',
+    # 'RfamGen': '#FDB462',
 }
 
 # ---------------- Utilities -----------------

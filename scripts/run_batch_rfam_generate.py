@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
 Batch-generate sequences using trained RNAgg models for multiple RFAM families and 4 variants:
-  - nuc vs non-nuc
+  - nuc vs RNAgg
   - aligned vs unaligned
 
-This script looks for models under `results/<family>/<nuc|non-nuc>/<aligned|unaligned>/` with
-names like `model_<family>_<nuc|non-nuc>_<aligned|unaligned>.pth` by default. For each found model it
+This script looks for models under `results/<family>/<nuc|RNAgg>/<aligned|unaligned>/` with
+names like `model_<family>_<nuc|RNAgg>_<aligned|unaligned>.pth` by default. For each found model it
 calls `scripts/RNAgg_generate.py` to produce sequences and writes logs to the same output directory.
 
 Usage (dry-run prints commands):
@@ -24,8 +24,10 @@ from typing import List
 
 DEFAULT_MODELS_ROOT = 'results'
 DEFAULT_OUTPUT_ROOT = 'output'
-DEFAULT_GEN_SCRIPT = os.path.join('scripts', 'RNAgg_generate.py')
-NUC_KEYS = ['non-nuc', 'nuc']
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_GEN_SCRIPT = os.path.join(SCRIPT_DIR, 'RNAgg_generate.py')
+# DEFAULT_GEN_SCRIPT = os.path.join('scripts', 'RNAgg_generate.py')
+NUC_KEYS = ['RNAgg', 'nuc']
 ALIGN_KEYS = ['unaligned', 'aligned']
 
 
@@ -121,15 +123,15 @@ def main():
                     print(f'[WARN] model for {fam} {nuc_key} {align_key} not found; skipping')
                     continue
                 # decide outfile and outdir: write into output/<category>/ with one fasta per family
-                # categories: non-nuc_unaligned, non-nuc_aligned, nuc_unaligned, nuc_aligned
+                # categories: RNAgg_unaligned, RNAgg_aligned, nuc_unaligned, nuc_aligned
                 if nuc_key == 'nuc' and align_key == 'unaligned':
                     category = 'nuc_unaligned'
                 elif nuc_key == 'nuc' and align_key == 'aligned':
                     category = 'nuc_aligned'
-                elif nuc_key == 'non-nuc' and align_key == 'unaligned':
-                    category = 'non-nuc_unaligned'
+                elif nuc_key == 'RNAgg' and align_key == 'unaligned':
+                    category = 'RNAgg_unaligned'
                 else:
-                    category = 'non-nuc_aligned'
+                    category = 'RNAgg_aligned'
 
                 out_root = args.out_root if args.out_root else DEFAULT_OUTPUT_ROOT
                 outdir = os.path.join(out_root, category)

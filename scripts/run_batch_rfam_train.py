@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Batch-run RNAgg training for multiple RFAM families and 4 variants:
-  - nuc vs non-nuc
+  - nuc vs RNAgg
   - aligned vs unaligned
 
 The script finds input txt files under `preprocessing/RfamSeed/rfam_out/rfam_txt/` by default,
@@ -35,7 +35,7 @@ SUFFIXES = {
     'aligned': '_aligned.txt'
 }
 
-NUC_KEYS = ['non-nuc', 'nuc']
+NUC_KEYS = ['RNAgg', 'nuc']
 ALIGN_KEYS = ['unaligned', 'aligned']
 
 
