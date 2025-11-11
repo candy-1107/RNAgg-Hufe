@@ -1,186 +1,170 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
-
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "../../scripts"))
-)
-
 import os
 import sys
 import argparse
-
-# Optional: append user's ~/pyscript if available (avoid KeyError on Windows)
-_home = os.environ.get("HOME") or os.environ.get("USERPROFILE")
-if _home:
-    _p = os.path.join(_home, "pyscript")
-    if os.path.isdir(_p) and _p not in sys.path:
-        sys.path.append(_p)
-# sys.path.append("/home/terai/pyscript")
-# import basic
 import re
 import numpy as np
 from Bio import AlignIO
+import chardet
+
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "scripts"))
+)
+# sys.path.append(os.environ['HOME'] + "/pyscript")
+sys.path.append(os.path.join(os.path.expanduser("~"), "pyscript"))
+# sys.path.append("/home/terai/pyscript")
 
 # from SS2shape2 import generate_rule_G4b, SCFGParseError
 from SS2shape3 import generate_rule_G4b, SCFGParseError, getBPpos_ij
 
 
 def getBP(ss: list):
+    """
+    解析二级结构字符串，返回碱基对列表。
+    """
     bp_list = []
     stack = []
-    for i in range(len(ss)):
-        if ss[i] == "(" or ss[i] == "<" or ss[i] == "{" or ss[i] == "[":
+    for i, s in enumerate(ss):
+        if s in "(<{[":
             stack.append(i)
-        elif ss[i] == ")" or ss[i] == ">" or ss[i] == "}" or ss[i] == "]":
+        elif s in ")>}]":
             left = stack.pop()
             bp_list.append((left, i))
-        elif (
-            ss[i] == "."
-            or ss[i] == ","
-            or ss[i] == ":"
-            or ss[i] == "_"
-            or ss[i] == "-"
-            or ss[i] == "~"
-        ):
+        elif s in ".,:_-~":
             pass
-        elif (
-            ss[i] == "A" or ss[i] == "a" or ss[i] == "B" or ss[i] == "b"
-        ):  # pseudo knot
+        elif s in "AaBb":  # pseudo knot
             pass
         else:
-            print(f"Unexpected SS annotation ({ss[i]})", file=sys.stderr)
+            print(f"Unexpected SS annotation ({s})", file=sys.stderr)
             exit(0)
-
     return bp_list
 
 
+# 合法的碱基对
 valid_pair = ["AU", "UA", "GC", "CG", "GU", "UG"]
 
 
 def main(args: dict):
+    """
+    处理Stockholm格式文件，输出未对齐和对齐的序列及二级结构。
+    """
+    # 先打开输出文件
+    with open(args.outfile_una, mode="w") as f_una, open(
+            args.outfile_ali, mode="w"
+    ) as f_ali:
+        # 读取Stockholm文件,自动检测编码格式,写入utf-8临时文件，再用AlignIO读取
+        def detect_encoding(file_path):
+            with open(file_path, "rb") as f:
+                raw = f.read(4096)
+            result = chardet.detect(raw)
+            return result["encoding"]
 
-    # 出力ファイルを先にオープンしておく
-    f_una = open(args.outfile_una, mode="w")
-    f_ali = open(args.outfile_ali, mode="w")
+        encoding = detect_encoding(args.stk)
+        with open(args.stk, encoding=encoding) as handle:
+            align = AlignIO.read(handle, "stockholm")
 
-    align = AlignIO.read(args.stk, "stockholm")
+        SS = align.column_annotations["secondary_structure"]
+        SS_list = list(SS)
 
-    SS = align.column_annotations["secondary_structure"]
-    SS_list = [i for i in SS]
-    # print(SS) # チェック
+        # 获取共通二级结构的碱基对
+        bp_list = getBP(SS_list)
 
-    # bp_listの取得
-    bp_list = getBP(SS_list)  # 共通2時構造の塩基対
+        num_pairs = {}
+        sid = 0
+        max_len, min_len = -1e10, 1e10
+        save_nr_set = set()
 
-    num_pairs = {}
-    sid = 0
-    max_len, min_len = -1e10, 1e10
-    save_nr_set = set()
-    for record in align:
+        for record in align:
+            # 检查是否有非法碱基
+            pattern = r"[^AUGC-]"
+            seq_str = str(record.seq).upper()
+            matches = re.findall(pattern, seq_str)
+            if matches:
+                print(
+                    f"{record.id} contains invalid letters {matches}.", file=sys.stderr
+                )
+                continue
 
-        # AUGC-以外の塩基が含まれているかをチェック
-        pattern = r"[^AUGC-]"
-        seq_str = str(record.seq).upper()
-        matches = re.findall(pattern, seq_str)
-        if matches:
-            print(
-                f"{record.id} contains invalid letters {matches}.", file=sys.stderr
-            )  # cmalignの結果は小文字を含むので、取り除く。
-            continue
+            seq_list = list(seq_str)
 
-        seq_list = [i for i in seq_str]
+            # 检查bp_list中的碱基对是否合法
+            bp_list_pass = []
+            for bp in bp_list:
+                pair = seq_list[bp[0]] + seq_list[bp[1]]
+                if pair in valid_pair:
+                    bp_list_pass.append(bp)
+                    num_pairs[pair] = num_pairs.get(pair, 0) + 1
 
-        # bp_listに含まれる塩基をチェック
-        bp_list_pass = []  # AU, GC, GUで形成されるもの
+            # 构建新的二级结构注释
+            SS_list_pass = ["." for _ in SS]
+            for bp in bp_list_pass:
+                SS_list_pass[bp[0]] = "("
+                SS_list_pass[bp[1]] = ")"
 
-        for bp in bp_list:
-            pair = seq_list[bp[0]] + seq_list[bp[1]]
-            if pair in valid_pair:
-                bp_list_pass.append(bp)
+            seq_nr, ss_nr = [], []
+            for i, base in enumerate(seq_list):
+                if base != "-":
+                    seq_nr.append(base)
+                    if SS_list_pass[i] in "().":
+                        ss_nr.append(SS_list_pass[i])
+                    else:
+                        print(
+                            f"Unexpected SS annotation ({SS_list_pass[i]})",
+                            file=sys.stderr,
+                        )
+                        exit(0)
 
-                # pairを種類ごとに数えておく
-                if pair not in num_pairs:
-                    num_pairs[pair] = 0  # 動的初期化
-                num_pairs[pair] += 1
-        # print(bp_list)
-        # print(bp_list_pass)
+            seq_str = "".join(seq_nr)
+            ss_str = "".join(ss_nr)
+            ali_seq_str = "".join(seq_list)
+            ali_ss_str = "".join(SS_list_pass)
 
-        # bp_list_passに従って、新しい２次構造アノテーションを作る
-        SS_list_pass = ["." for i in SS]  # 配列長のドットで初期化
-        for bp in bp_list_pass:
-            SS_list_pass[bp[0]] = "("
-            SS_list_pass[bp[1]] = ")"
+            # 检查G4 grammar解析
+            bp = getBPpos_ij(ss_str)
+            rule = []
+            try:
+                generate_rule_G4b(
+                    0, rule, seq_str.lower(), ss_str, bp, (0, len(ss_str) - 1), "S"
+                )
+            except SCFGParseError:
+                print(f"SCFGParse Error found in {record.id}.", file=sys.stderr)
+                continue
 
-        seq_nr, ss_nr = [], []
-        for i in range(len(seq_list)):
+            max_len = max(max_len, len(seq_str))
+            min_len = min(min_len, len(seq_str))
 
-            if seq_list[i] != "-":  # ギャップを取り除く(args.alignedがFalseのとき)
-                seq_nr.append(seq_list[i])
-
-                if SS_list_pass[i] == "(":
-                    ss_nr.append("(")
-                elif SS_list_pass[i] == ")":
-                    ss_nr.append(")")
-                elif SS_list_pass[i] == ".":
-                    ss_nr.append(".")
-                else:
-                    print(
-                        f"Unexpected SS annotation ({SS_list_pass[i]})", file=sys.stderr
-                    )
-                    exit(0)
-
-        seq_str = "".join(seq_nr)
-        ss_str = "".join(ss_nr)
-
-        ali_seq_str = "".join(seq_list)
-        ali_ss_str = "".join(SS_list_pass)
-
-        # ギャップを除いた状態でG4 grammarでのparsingをチェックする。
-        bp = getBPpos_ij(ss_str)
-        rule = []
-        try:
-            generate_rule_G4b(
-                0, rule, seq_str.lower(), ss_str, bp, (0, len(ss_str) - 1), "S"
-            )  # ギャップを除いた状態でG4bでparseできるかをチェック
-        except SCFGParseError as e:
-            print(f"SCFGParse Error found in {record.id}.", file=sys.stderr)
-            continue
-
-        if max_len < len(seq_str):
-            max_len = len(seq_str)
-        if min_len > len(seq_str):
-            min_len = len(seq_str)
-
-        if seq_str in save_nr_set:
-            print(f"Duplication of sequence {record.id}.", file=sys.stderr)
-            continue
-        else:
+            if seq_str in save_nr_set:
+                print(f"Duplication of sequence {record.id}.", file=sys.stderr)
+                continue
             save_nr_set.add(seq_str)
 
-        print(f"{sid} {seq_str} {ss_str}", file=f_una)
-        print(f"{sid} {ali_seq_str} {ali_ss_str}", file=f_ali)
-        sid += 1
+            print(f"{sid} {seq_str} {ss_str}", file=f_una)
+            print(f"{sid} {ali_seq_str} {ali_ss_str}", file=f_ali)
+            sid += 1
 
-    # 全pairの数を出力
-    ordered = sorted(num_pairs.items(), key=lambda x: x[1], reverse=True)
-    sum_pairs = np.sum(list(num_pairs.values()))
+        # 输出所有碱基对的统计
+        ordered = sorted(num_pairs.items(), key=lambda x: x[1], reverse=True)
+        sum_pairs = np.sum(list(num_pairs.values()))
+        for pair, num in ordered:
+            print(pair, num / sum_pairs, file=sys.stderr)
 
-    for pair, num in ordered:
-        print(pair, num / sum_pairs, file=sys.stderr)
-
+        print(
+            f"max len = {max_len}, min len = {min_len}, file = {args.stk}",
+            file=sys.stderr,
+        )
     print(
         f"max len = {max_len}, min len = {min_len}, file = {args.stk}", file=sys.stderr
     )
 
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Process Stockholm file and output unaligned/aligned sequence and structure."
+    )
     parser.add_argument("stk", help="stockholm format file")
     parser.add_argument("outfile_una", help="unaligned input file name")
     parser.add_argument("outfile_ali", help="aligned input file name")
     # parser.add_argument('--aligned', action='store_true', help='make aligned sequence data')
     args = parser.parse_args()
-
     main(args)

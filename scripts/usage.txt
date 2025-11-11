@@ -17,7 +17,9 @@ python RNAgg_train.py ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned\RF00001_
 # Dry-run (prints commands for first 10 families discovered under aligned/unaligned dirs):
 python run_batch_rfam_train.py --aligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_aligned --unaligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned --n 10
 # Real run (execute training):
-python run_batch_rfam_train.py --aligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_aligned --unaligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned --n 10 --dry_run False --epoch 200
+# 在 scripts 目录下运行
+python run_batch_rfam_train.py --aligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_aligned --unaligned_dir ..\preprocessing\RfamSeed\rfam_out\rfam_unaligned --n 10 --dry_run False --epoch 200 --use_gpu
+
 
 # 3) Generate sequences from a single trained model
 # Basic invocation (generate 100 sequences and output fasta). Run inside `scripts`:

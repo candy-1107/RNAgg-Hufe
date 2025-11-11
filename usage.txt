@@ -1,0 +1,33 @@
+
+
+**运行命令:**
+```bash
+python scripts/plot_pairwise_identity.py
+```
+
+---
+### 总结
+
+完整的核心流程命令如下：
+
+```bash
+# 1. 训练
+python scripts/run_batch_rfam_train.py
+
+# 2. 生成
+python scripts/run_batch_rfam_generate.py
+
+# 3. 比对 (在Windows CMD中)
+scripts\run_all_cmalign.bat
+
+# 4. 计算 Bit Score
+python scripts/calculate_bit_scores.py
+
+# 5. 计算 Max-NI (关键数据生成步骤)
+python scripts/plot_max_ni_distribution.py
+
+# 6. 生成所有最终图表
+python scripts/plot_bit_score_vs_max_ni.py
+python scripts/plot_length_distribution.py
+python scripts/plot_pairwise_identity.py
+```
