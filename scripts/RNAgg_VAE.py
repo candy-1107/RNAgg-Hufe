@@ -142,6 +142,10 @@ class Conv_VAE(nn.Module):
         c, h1, w1 = conv_shape
         h = h_flat.view(b, c, h1, w1)
         x_rec = self.decoder(h)
+        # If spatial size changed due to stride/rounding, resize back to original input size
+        C_in, H_in, W_in = self.input_shape
+        if x_rec.size(2) != H_in or x_rec.size(3) != W_in:
+            x_rec = F.interpolate(x_rec, size=(H_in, W_in), mode='bilinear', align_corners=False)
         return x_rec
 
     def forward(self, x):
