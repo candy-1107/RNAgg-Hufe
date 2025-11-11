@@ -28,19 +28,61 @@ class MatrixDataset(Dataset):
 
 
 def load_aggregated_npz(path):
+    """Load aggregated_matrices.npz and return array shaped (N, C, H, W).
+
+    The aggregated npz created by preprocessing stores 11 separate keys (labels),
+    each an (H, W) matrix. We stack them along channel dimension C, and add a
+    batch dimension N=1, yielding (1, 11, H, W).
+
+    If the file format differs (already stacked), we try to coerce into (N,C,H,W).
+    """
     data = np.load(path, allow_pickle=True)
-    # pick first array-like object found
+
+    # Typical case: multiple named arrays per label
     if hasattr(data, 'files') and len(data.files) > 0:
-        key = data.files[0]
-        arr = data[key]
-    else:
-        # fallback
-        arr = data
-    # ensure shape (N, C, H, W)
-    arr = np.asarray(arr)
-    # if shape like (N, H, W) add channel dim
-    if arr.ndim == 3:
-        arr = arr[:, None, :, :]
+        files = list(data.files)
+        # Prefer canonical label order if present
+        canonical = ["A", "U", "G", "C", "gap",
+                     "A-U", "U-A", "G-C", "C-G", "G-U", "U-G"]
+
+        if all(lbl in files for lbl in canonical):
+            keys = canonical
+        else:
+            # Fallback: keep the original order in the npz
+            keys = files
+
+        mats = []
+        for k in keys:
+            mat = np.asarray(data[k])
+            if mat.ndim != 2:
+                # If someone saved differently, try to coerce later
+                mats = None
+                break
+            mats.append(mat)
+
+        if mats is not None and len(mats) > 0:
+            # (C, H, W)
+            arr_c_hw = np.stack(mats, axis=0)
+            # (N=1, C, H, W)
+            return arr_c_hw[None, ...]
+
+        # Fallback path when arrays are already stacked differently
+        # Try common shapes and coerce to (N,C,H,W)
+        # e.g., one key already holds (C,H,W) or (N,C,H,W)
+        first = np.asarray(data[files[0]])
+        if first.ndim == 3:
+            # assume (C,H,W)
+            return first[None, ...]
+        if first.ndim == 4:
+            # already (N,C,H,W)
+            return first
+
+    # Final fallback: treat the whole np.load result as array
+    arr = np.asarray(data)
+    if arr.ndim == 3:  # (C,H,W) -> add batch
+        return arr[None, ...]
+    if arr.ndim == 2:  # (H,W) -> assume single-channel, add C and N
+        return arr[None, None, ...]
     return arr
 
 
