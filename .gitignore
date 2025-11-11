@@ -28,6 +28,9 @@ Thumbs.db
 *.tar
 *.gz
 *.rar
+*.pdf
+*.docx
+*.exe
 
 # Data
 *.csv
