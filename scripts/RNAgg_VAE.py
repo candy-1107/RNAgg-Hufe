@@ -152,7 +152,22 @@ class Conv_VAE(nn.Module):
 
 
 if __name__ == '__main__':
-    m = Conv_VAE((11, 64, 64), latent_dim=64, base_channels=8)
-    x = torch.randn(2, 11, 64, 64)
-    y, mu, var = m(x)
-    print('sanity shapes ->', x.shape, '->', y.shape, mu.shape, var.shape, flush=True)
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Sanity-check Conv_VAE')
+    parser.add_argument('--input-shape', default='11,64,64', help='C,H,W for conv model (comma-separated)')
+    parser.add_argument('--latent-dim', type=int, default=64)
+    parser.add_argument('--device', default='cpu')
+    args = parser.parse_args()
+
+    device = torch.device(args.device)
+
+    def count_params(m):
+        return sum(p.numel() for p in m.parameters() if p.requires_grad)
+
+    C, H, W = [int(x) for x in args.input_shape.split(',')]
+    model = Conv_VAE((C, H, W), latent_dim=args.latent_dim).to(device)
+    x = torch.randn(2, C, H, W).to(device)
+    out, mu, var = model(x)
+    print('model=Conv_VAE, params=', count_params(model))
+    print('input', x.shape, 'output', out.shape, 'mu', mu.shape, 'var', var.shape)
