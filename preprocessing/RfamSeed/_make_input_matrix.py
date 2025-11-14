@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import sys, os
 
 sys.path.append(
@@ -11,13 +9,8 @@ import sys
 import argparse
 import re
 import numpy as np
-from Bio import AlignIO
 
 
-# Convert sequence + secondary structure into 11 matrices per record:
-# Singles: A, U, G, C, gap ('-')  -> set (i,i) = 1
-# Pairs (directional): A-U, U-A, G-C, C-G, G-U, U-G -> set (i,j) = 1 for i<->j
-# No OTHER matrix. Unrecognized bases/pairs are skipped.
 
 PAIR_LABELS = ["A-U", "U-A", "G-C", "C-G", "G-U", "U-G"]
 SINGLE_LABELS = ["A", "U", "G", "C", "gap"]
@@ -107,6 +100,7 @@ def sanitize_record_id(rid: str):
 # -------- Process Stockholm (.stk/.sto) --------
 
 def process_alignment(stk_file: str, out_dir: str, aggregate: bool = False, save_text: bool = False):
+    from Bio import AlignIO  # lazy import here
     align = AlignIO.read(stk_file, "stockholm")
     # Find a consensus secondary structure key
     ss_key = None
@@ -134,17 +128,27 @@ def process_alignment(stk_file: str, out_dir: str, aggregate: bool = False, save
             print(f"{record.id} contains invalid characters, skipping.", file=sys.stderr)
             continue
 
+        # Build per-label matrices and stack them into a single array (11, L, L)
         matrices = build_matrices(seq_str, SS_consensus)
+        arr = np.stack([matrices[label] for label in ALL_LABELS], axis=0).astype(np.int8)
 
         rec_id = sanitize_record_id(record.id)
-        rec_dir = os.path.join(out_dir, rec_id)
-        os.makedirs(rec_dir, exist_ok=True)
+        out_path = os.path.join(out_dir, f"{rec_id}.npy")
+        tmp_npy = out_path + ".tmp.npy"
+        np.save(tmp_npy, arr)
+        try:
+            os.replace(tmp_npy, out_path)
+        except Exception:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+            os.rename(tmp_npy, out_path)
 
-        # Save matrices for this record
-        for label, mat in matrices.items():
-            np.save(os.path.join(rec_dir, f"{label}.npy"), mat)
-            if save_text:
-                np.savetxt(os.path.join(rec_dir, f"{label}.txt"), mat, fmt="%d")
+        # If requested, also save per-label text files in a small subdirectory for easy viewing
+        if save_text:
+            txt_dir = os.path.join(out_dir, rec_id)
+            os.makedirs(txt_dir, exist_ok=True)
+            for label, mat in matrices.items():
+                np.savetxt(os.path.join(txt_dir, f"{label}.txt"), mat, fmt="%d")
 
         if aggregate:
             for label, mat in matrices.items():
@@ -207,13 +211,28 @@ def process_text(txt_file: str, out_root: str, aggregate: bool = False, save_tex
         elif aggregate and L != L_ref:
             # For simplicity, we aggregate only if all records share the same length
             print(f"Skip aggregation for {rid}: length differs from first record.", file=sys.stderr)
+
+        # Build matrices and stack into a single array (11,L,L)
         mats = build_matrices(seq, struct)
-        rec_dir = os.path.join(out_dir, sanitize_record_id(rid))
-        os.makedirs(rec_dir, exist_ok=True)
-        for label, mat in mats.items():
-            np.save(os.path.join(rec_dir, f"{label}.npy"), mat)
-            if save_text:
-                np.savetxt(os.path.join(rec_dir, f"{label}.txt"), mat, fmt="%d")
+        arr = np.stack([mats[label] for label in ALL_LABELS], axis=0).astype(np.int8)
+
+        fname = sanitize_record_id(rid) + ".npy"
+        out_path = os.path.join(out_dir, fname)
+        tmp_npy = out_path + ".tmp.npy"
+        np.save(tmp_npy, arr)
+        try:
+            os.replace(tmp_npy, out_path)
+        except Exception:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+            os.rename(tmp_npy, out_path)
+
+        if save_text:
+            txt_dir = os.path.join(out_dir, sanitize_record_id(rid))
+            os.makedirs(txt_dir, exist_ok=True)
+            for label, mat in mats.items():
+                np.savetxt(os.path.join(txt_dir, f"{label}.txt"), mat, fmt="%d")
+
         if aggregate and L == L_ref:
             for label, mat in mats.items():
                 agg[label] += mat
@@ -222,6 +241,45 @@ def process_text(txt_file: str, out_root: str, aggregate: bool = False, save_tex
         agg_path = os.path.join(out_dir, "aggregated_matrices.npz")
         np.savez(agg_path, **agg)
         print(f"Aggregated matrices saved to {agg_path}", file=sys.stderr)
+
+
+# -------- New: Build consolidated .pt per family from rfam_aligned --------
+
+def _stack_to_array(seq: str, struct: str) -> np.ndarray:
+    """Return a numpy int8 array of shape (11,L,L) for one record."""
+    mats = build_matrices(seq, struct)
+    mats_list = [mats[label] for label in ALL_LABELS]
+    arr = np.stack(mats_list, axis=0).astype(np.int8)
+    return arr
+
+
+def save_family_npy_files(txt_file: str, output_root: str) -> int:
+    """Read a *_aligned.txt family file and save one .npy file per sequence
+    under output_root/<family>/<record_id>.npy, where each file contains a (11,L,L) int8 array.
+    Returns the number of sequences saved.
+    """
+    base = os.path.splitext(os.path.basename(txt_file))[0]
+    family = re.sub(r"_aligned$", "", base)
+    out_dir = os.path.join(output_root, family)
+    os.makedirs(out_dir, exist_ok=True)
+
+    count = 0
+    for rid, seq, struct in parse_txt_records(txt_file):
+        arr = _stack_to_array(seq, struct)  # (11,L,L) int8
+        fname = sanitize_record_id(rid) + ".npy"
+        out_path = os.path.join(out_dir, fname)
+        tmp_npy = out_path + ".tmp.npy"
+        np.save(tmp_npy, arr)
+        try:
+            os.replace(tmp_npy, out_path)
+        except Exception:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+            os.rename(tmp_npy, out_path)
+        count += 1
+
+    print(f"Saved {count} sequence files under {out_dir}")
+    return count
 
 
 # -------- Dispatcher & CLI --------
@@ -236,12 +294,36 @@ def process_input(path: str, out_dir: str, aggregate: bool = False, save_text: b
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert RNA sequence+structure inputs (.txt or .stk) to 11 matrices per sequence.")
-    parser.add_argument("inputs", nargs="+", help="One or more input files: .txt (id seq struct) or .stk/.sto (Stockholm)")
-    parser.add_argument("out_dir", help="Output directory root. For .txt, matrices are saved under out_dir/<basename>/<record_id>/.")
+    parser = argparse.ArgumentParser(description="RNA input conversion utilities: (1) per-sequence 11 matrices from .txt/.stk; (2) per-family folder of per-sequence (11,L,L) .npy files from rfam_aligned directory.")
+    parser.add_argument("inputs", nargs="*", help="One or more input files: .txt (id seq struct) or .stk/.sto (Stockholm). Ignored if --aligned-dir is used.")
+    parser.add_argument("out_dir", nargs="?", help="Output directory root for per-sequence matrices. Required unless --aligned-dir is used.")
     parser.add_argument("--aggregate", action="store_true", help="Save per-input aggregated matrices as aggregated_matrices.npz")
     parser.add_argument("--text", action="store_true", help="Also save .txt matrices for easy viewing")
+    parser.add_argument("--aligned-dir", dest="aligned_dir", default=None, help="Directory containing RFxxxxx_aligned.txt files; outputs to output_root/<family>/<record_id>.npy as (11,L,L) arrays")
+    parser.add_argument("--output-root", dest="output_root", default=os.path.join(os.getcwd(), "output"), help="Root output directory for --aligned-dir mode (default: ./output)")
     args = parser.parse_args()
+
+    # Mode 1: per-family folder with per-sequence .npy files
+    if args.aligned_dir:
+        if not os.path.isdir(args.aligned_dir):
+            print(f"Aligned directory not found: {args.aligned_dir}", file=sys.stderr)
+            sys.exit(2)
+        files = sorted([os.path.join(args.aligned_dir, f) for f in os.listdir(args.aligned_dir) if f.lower().endswith('.txt')])
+        if not files:
+            print(f"No .txt files found in {args.aligned_dir}")
+            return
+        total = 0
+        for f in files:
+            try:
+                total += save_family_npy_files(f, args.output_root)
+            except Exception as e:
+                print(f"Error processing {f}: {e}", file=sys.stderr)
+        print(f"Done. Total sequence files saved: {total}")
+        return
+
+    # Mode 2: original behavior for individual inputs
+    if not args.inputs or not args.out_dir:
+        parser.error("Either provide --aligned-dir or positional inputs + out_dir.")
 
     for path in args.inputs:
         if not os.path.exists(path):

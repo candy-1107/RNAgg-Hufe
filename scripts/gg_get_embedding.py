@@ -1,80 +1,129 @@
 import sys
 import os
 import argparse
-sys.path.append(os.environ['HOME'] + "/pyscript")
-#sys.path.append("Users/terai/RNAVAE")
-#import basic
 import pickle
-#import copy
 import numpy as np
-#import pandas as pd
-#import seaborn as sns
-import matplotlib.pyplot as plt
 import RNAgg_VAE
-import SS2shape3
-import Binary_matrix
 import utils_gg as utils
-
-#import graphviz
 from torch.utils.data import DataLoader
-#from collections import defaultdict
-
 import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-#from joblib import Parallel, delayed
-import random
-#from libpysal.weights import KNN
 
+sys.path.append(os.environ.get('HOME', '') + "/pyscript")
 NUC_LETTERS = list('ACGU-x')
-#SS_LETTERS = list('.()')
 G_DIM=11
 
-def main(args: dict):
-    
-    # 準備
+# helper: parse dot-bracket
+def _parse_dot_bracket(ss: str):
+    stack = []
+    pairs = {}
+    for i, ch in enumerate(ss):
+        if ch == '(':
+            stack.append(i)
+        elif ch == ')':
+            if not stack:
+                continue
+            j = stack.pop()
+            pairs[j] = i
+            pairs[i] = j
+    return pairs
+
+# helper: build binary channel matrices (N, C, L, L)
+def build_binary_matrices(sid2seq, sid2ss, sid_list, input_C=None, nuc_only_flag='no'):
+    SINGLE = ["A","U","G","C","gap"]
+    PAIRS = ["A-U","U-A","G-C","C-G","G-U","U-G"]
+    default_C = len(SINGLE) + len(PAIRS)
+    C = input_C if input_C is not None else (default_C if nuc_only_flag != 'yes' else len(SINGLE))
+    mats = []
+    for sid in sid_list:
+        seq = sid2seq.get(sid, '')
+        ss = sid2ss.get(sid, '')
+        L = len(seq)
+        mat = np.zeros((C, L, L), dtype=np.float32)
+        pairs = _parse_dot_bracket(ss)
+        # pairs channels
+        for i in range(L):
+            if i in pairs:
+                j = pairs[i]
+                if i < j:
+                    b1 = seq[i] if i < len(seq) else 'N'
+                    b2 = seq[j] if j < len(seq) else 'N'
+                    if b1 not in ['A','U','G','C']:
+                        b1 = 'gap'
+                    if b2 not in ['A','U','G','C']:
+                        b2 = 'gap'
+                    pair_label = f"{b1}-{b2}"
+                    if pair_label in PAIRS and C >= len(SINGLE) + len(PAIRS):
+                        ch = len(SINGLE) + PAIRS.index(pair_label)
+                        mat[ch, i, j] = 1.0
+                        # reverse orientation
+                        rev = f"{b2}-{b1}"
+                        rev_idx = len(SINGLE) + PAIRS.index(rev)
+                        mat[rev_idx, j, i] = 1.0
+        # single/diagonal channels
+        for i in range(L):
+            b = seq[i] if i < len(seq) else 'N'
+            if b not in ['A','U','G','C']:
+                b = 'gap'
+            if b in SINGLE:
+                idx = SINGLE.index(b)
+                if idx < C:
+                    mat[idx, i, i] = 1.0
+        mats.append(mat)
+    return np.stack(mats, axis=0)
+
+
+def main(args):
     token2idx = utils.get_token2idx(NUC_LETTERS)
     idx2token = dict([y,x] for x,y in token2idx.items())
     word_size = len(NUC_LETTERS)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(device, file=sys.stderr)
-    
-    # モデルの初期化とロード
-    checkpoint = torch.load(args.model)
-    #d_rep, max_len = checkpoint['d_rep'], checkpoint['max_len']
-    d_rep, max_len, model_type, nuc_yes_no = checkpoint['d_rep'], checkpoint['max_len'], checkpoint['type'], checkpoint['nuc_only']
-    if model_type == 'act':
-        if nuc_yes_no == 'yes':
-            model = RNAgg_VAE.MLP_VAE_REGRE(max_len*(word_size), max_len*(word_size), d_rep, device=device).to(device)
-        else:
-            model = RNAgg_VAE.MLP_VAE_REGRE(max_len*(word_size+G_DIM), max_len*(word_size+G_DIM), d_rep, device=device).to(device)
-    else:
-        if nuc_yes_no == 'yes':
-            model = RNAgg_VAE.MLP_VAE(max_len*(word_size), max_len*(word_size), d_rep, device=device).to(device)
-        else:
-            model = RNAgg_VAE.MLP_VAE(max_len*(word_size+G_DIM), max_len*(word_size+G_DIM), d_rep, device=device).to(device)
-    
+
+    # load checkpoint
+    checkpoint = torch.load(args.model, map_location=device)
+    d_rep = checkpoint.get('d_rep')
+    input_shape = checkpoint.get('input_shape')
+    if input_shape is None:
+        max_len = checkpoint.get('max_len')
+        if max_len is None:
+            raise RuntimeError('Checkpoint missing input shape and max_len; cannot infer model input size')
+        input_C = 11
+        input_shape = (input_C, max_len, max_len)
+
+    # always use Conv_VAE (remove MLP variants)
+    model = RNAgg_VAE.Conv_VAE(input_shape, latent_dim=d_rep, device=device).to(device)
     model.load_state_dict(checkpoint['model_state_dict'])
     model.to(device)
     model.eval()
 
-    # 学習データの分散表現を取得する
-    sid2seq, sid2ss  = utils.readInput(args.input)
+    sid2seq, sid2ss = utils.readInput(args.input)
     sid_list = list(sid2seq.keys())
-    sid2act = dict([(sid, np.nan) for sid in sid_list]) #utils.Datasetを使うためのダミーデータ
+    sid2act = dict([(sid, np.nan) for sid in sid_list])
     act_list = [sid2act[sid] for sid in sid_list]
-    B_mat = Binary_matrix.makeMatrix(sid2seq, sid2ss, sid_list, word_size, G_DIM, token2idx, nuc_yes_no)
 
-    d = utils.Dataset(B_mat, sid_list, act_list)
+    B_mat = build_binary_matrices(sid2seq, sid2ss, sid_list, input_C=input_shape[0], nuc_only_flag=checkpoint.get('nuc_only','no'))
+
+    # pad to target H,W
+    N, C, H, W = B_mat.shape
+    tC, tH, tW = input_shape
+    if H != tH or W != tW or C != tC:
+        padded = np.zeros((N, tC, tH, tW), dtype=np.float32)
+        for i in range(N):
+            ccopy = min(C, tC)
+            hcopy = min(H, tH)
+            wcopy = min(W, tW)
+            padded[i, :ccopy, :hcopy, :wcopy] = B_mat[i, :ccopy, :hcopy, :wcopy]
+        B_mat = padded
+
+    B_t = torch.tensor(B_mat, dtype=torch.float32)
+    d = utils.Dataset(B_t, sid_list, act_list)
     train_dataloader = DataLoader(d, batch_size=args.s_bat, shuffle=False)
     sid_list_exec = []
     for x, t, v in train_dataloader:
         x = x.to(device)
-        mean, var = model.encoder(x)
-        #var *= 0
-        #z_bat = model.reparameterize(mean, var)
+        # Conv_VAE.forward returns x_rec, mu, var
+        _, mean, var = model(x)
         z_bat = mean
         if 'z' in locals():
             z = torch.cat((z, z_bat), dim=0)
@@ -83,30 +132,18 @@ def main(args: dict):
         print(z.shape, file=sys.stderr)
         sid_list_exec += t
 
-    #random.shuffle(sid_list_exec)
     z_np = z.to('cpu').detach().numpy().copy()
-    
-    emb_inf = {"sid_list":sid_list_exec, "emb":z_np}
-    
-    f = open(args.out_pkl, "wb")
-    pickle.dump(emb_inf, f)
-    f.close()
-    
-if __name__ == '__main__':
+    emb_inf = {"sid_list": sid_list_exec, "emb": z_np}
+    with open(args.out_pkl, 'wb') as f:
+        pickle.dump(emb_inf, f)
 
+
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('input', help='input file name')
     parser.add_argument('model', help='trained VAE model')
     parser.add_argument('out_pkl', help='output pkl file')
-    #parser.add_argument('act', help='activity table')
-    #parser.add_argument('--regre', action='store_true', help='use regression combined model')
-    #parser.add_argument('--k', type=int, default=1, help='number of nearest neibours')
-    #parser.add_argument('--png', default="latent_act.png", help='output png file name')
-    parser.add_argument('--s_bat', type=int, default=100, help='batch size')    
-    #parser.add_argument('--nuc_only', action='store_true', help='nucleotide only model')
-    #parser.add_argument('--plot_size', type=int, default=5, help='size of point')
-    
+    parser.add_argument('--s_bat', type=int, default=100, help='batch size')
     args = parser.parse_args()
 
     main(args)
-
