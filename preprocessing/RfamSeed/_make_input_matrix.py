@@ -27,6 +27,13 @@ VALID_BASES = set("AUGC-")
 VALID_PAIRS = set([p.replace("-", "") for p in PAIR_LABELS])  # AU, UA, GC, CG, GU, UG
 
 
+def stack_matrices(mats_dict):
+    """Stack dict of 2D matrices into a single 3D array with channel order ALL_LABELS.
+    Returns ndarray of shape (11, L, L).
+    """
+    return np.stack([mats_dict[label] for label in ALL_LABELS], axis=0)
+
+
 def parse_pairs(ss_list):
     """Return list of (i,j) for base pairs using parentheses () <> {} [] as matching brackets."""
     stack = []
@@ -140,11 +147,13 @@ def process_alignment(stk_file: str, out_dir: str, aggregate: bool = False, save
         rec_dir = os.path.join(out_dir, rec_id)
         os.makedirs(rec_dir, exist_ok=True)
 
-        # Save matrices for this record
-        for label, mat in matrices.items():
-            np.save(os.path.join(rec_dir, f"{label}.npy"), mat)
-            if save_text:
-                np.savetxt(os.path.join(rec_dir, f"{label}.txt"), mat, fmt="%d")
+        # Save one 3D matrix (C=11, H=L, W=L) for this record
+        arr3d = stack_matrices(matrices)
+        np.save(os.path.join(rec_dir, "matrices.npy"), arr3d)
+        if save_text:
+            # Save channel labels order for reference
+            with open(os.path.join(rec_dir, "labels.txt"), "w", encoding="utf-8") as f:
+                f.write("\n".join(ALL_LABELS))
 
         if aggregate:
             for label, mat in matrices.items():
@@ -210,10 +219,13 @@ def process_text(txt_file: str, out_root: str, aggregate: bool = False, save_tex
         mats = build_matrices(seq, struct)
         rec_dir = os.path.join(out_dir, sanitize_record_id(rid))
         os.makedirs(rec_dir, exist_ok=True)
-        for label, mat in mats.items():
-            np.save(os.path.join(rec_dir, f"{label}.npy"), mat)
-            if save_text:
-                np.savetxt(os.path.join(rec_dir, f"{label}.txt"), mat, fmt="%d")
+        # Save one 3D matrix (C=11, H=L, W=L) for this record
+        arr3d = stack_matrices(mats)
+        np.save(os.path.join(rec_dir, "matrices.npy"), arr3d)
+        if save_text:
+            # Save channel labels order for reference
+            with open(os.path.join(rec_dir, "labels.txt"), "w", encoding="utf-8") as f:
+                f.write("\n".join(ALL_LABELS))
         if aggregate and L == L_ref:
             for label, mat in mats.items():
                 agg[label] += mat

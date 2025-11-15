@@ -5,20 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="310113be-553a-4502-87fe-cc30531acb29" name="更改" comment="Refactor file paths and enhance batch processing script for RNA G4 analysis">
-      <change afterPath="$PROJECT_DIR$/论文复现.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_10_25_10_16____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_10_25_10_16____.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_10_25_8_22____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_10_25_8_22____.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/___.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/___.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/在变基之前未提交的更改_[更改]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/在进行签出之前于_2025_10_25_下午10_16_取消提交了更改_[更改]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/在进行签出之前于_2025_10_25_下午8_22_取消提交了更改_[更改]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_10_25_10_16____.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_10_25_8_22____.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/___.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/RfamSeed/_make_input_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/RfamSeed/_make_input_matrix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/RfamSeed/rfam_out/rfam_stk/RF00001.stk" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/RfamSeed/rfam_out/rfam_stk/RF00001.stk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/RfamSeed/usage.txt" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/RfamSeed/usage.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PUSH_TAGS">
@@ -35,8 +44,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;assignee&quot;: &quot;candy-1107&quot;
+    }
+  ],
   &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
     &quot;assignee&quot;: &quot;candy-1107&quot;
   }
 }</component>
@@ -111,6 +124,8 @@
       <workItem from="1761377943837" duration="6554000" />
       <workItem from="1761386686451" duration="244000" />
       <workItem from="1762841783880" duration="1011000" />
+      <workItem from="1763041316581" duration="1060000" />
+      <workItem from="1763087063706" duration="163000" />
     </task>
     <task id="LOCAL-00001" summary="删除mxfold2">
       <option name="closed" value="true" />
@@ -161,7 +176,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>

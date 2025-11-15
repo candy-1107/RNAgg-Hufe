@@ -10,7 +10,7 @@ python _makeRfamSeedSto.py RF03156 Rfam.seed > rfam_out\rfam_stk\RF03156.stk
 
 
 # The following command creates unaligned and aligned training data.
-python _make_input_consG4.py rfam_out\rfam_stk\RF03156.stk rfam_out\rfam_unaligned\RF03156_unaligned.txt rfam_out\rfam_aligned\RF03156_aligned.txt
+python _make_input_consG4.py rfam_out\rfam_stk\RF00001.stk rfam_out\rfam_unaligned\RF00001_unaligned.txt rfam_out\rfam_aligned\RF00001_aligned.txt
 #多文件示例
 python _make_input_consG4.py rfam_out\rfam_stk\RF03064.stk rfam_out\rfam_unaligned\RF03064_unaligned.txt rfam_out\rfam_aligned\RF03064_aligned.txt
 python _make_input_consG4.py rfam_out\rfam_stk\RF02914.stk rfam_out\rfam_unaligned\RF02914_unaligned.txt rfam_out\rfam_aligned\RF02914_aligned.txt
