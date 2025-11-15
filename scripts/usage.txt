@@ -54,3 +54,10 @@ python organize_results_by_category.py --models_root ..\results --dest_root ..\f
 # - Adjust --epoch, --d_rep, --num, --s_bat, --n_cpu according to your resources.
 
 # End of usage
+
+#dataset
+ python "gg_make_dataset.py" --output-dir "d:\PyCharm 2024.1.7\Code\RNAgg-Hufe\matrices" --out-data-dir "d:\PyCharm 2024.1.7\Code\RNAgg-Hufe\data" --families RF00001 RF00005 RF00010
+
+
+#train
+python scripts\RNAgg_train.py --data-pt data\RF00001.matrices_aligned.pt --out_dir results --model_fname model_RF00001.pth --epoch 200 --s_bat 32 --d_rep 11 --lr 0.0005 --beta 0.001 --save_ongoing 10 --save-latent-dir latents --save-recon-dir reconstructions --png_prefix RF00001_
