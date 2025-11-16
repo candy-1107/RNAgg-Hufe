@@ -29,19 +29,7 @@ ALL_LABELS = SINGLE_LABELS + PAIR_LABELS
 
 def main(args: dict):
 
-    # Determine family folder under the input data file's directory and use it
-    data_pt = args['data_pt']
-    if not os.path.exists(data_pt):
-        raise RuntimeError(f"data_pt not found: {data_pt}")
-    default_family = os.path.splitext(os.path.basename(data_pt))[0]
-    family_name = args.get('family') if args.get('family') else default_family
-    data_parent = os.path.dirname(os.path.abspath(data_pt))
-    family_dir = os.path.join(data_parent, family_name)
-    os.makedirs(family_dir, exist_ok=True)
-    # Set out_dir to family_dir so downstream saving uses this location
-    args['out_dir'] = family_dir
-
-    model_path = os.path.join(family_dir, args['model_fname'])
+    model_path = os.path.join(args['out_dir'], args['model_fname'])
 
     # token2idx = utils.get_token2idx(NUC_LETTERS)
     # idx2token = {v: k for k, v in token2idx.items()}
@@ -110,7 +98,7 @@ def main(args: dict):
                 pred_pairs = pred_pairs[:, :, :mh, :mw]
             if th != mh or tw != mw:
                 target_pairs = target_pairs[:, :, :mh, :mw]
-            L1_pair = F.binary_cross_entropy_with_logits(pred_pairs, target_pairs, reduction='mean') / N
+            L1_pair = F.binary_cross_entropy(pred_pairs, target_pairs, reduction='sum') / N
 
             L1 = L1_nuc + L1_pair
 
@@ -168,21 +156,6 @@ def main(args: dict):
         print(f"Saved best model to {model_path} (epoch {best_epoch})", file=sys.stderr)
     else:
         print('No model was saved (no training performed).', file=sys.stderr)
-
-    # If requested, save latents (means/vars) to the provided directory. The path
-    # is interpreted relative to out_dir when not absolute.
-    save_latent_dir = args.get('save_latent_dir')
-    if save_latent_dir:
-        if not os.path.isabs(save_latent_dir):
-            save_latent_dir = os.path.join(args['out_dir'], save_latent_dir)
-        os.makedirs(save_latent_dir, exist_ok=True)
-        # save_latents will move the model to device internally
-        try:
-            save_latents(model, full_tensor, save_latent_dir, device, batch_size=args.get('s_bat', 100))
-            print(f"Saved latents (mean/var) to: {save_latent_dir}", file=sys.stderr)
-        except Exception as e:
-            print(f"Failed to save latents to {save_latent_dir}: {e}", file=sys.stderr)
-
 
     # plotting: build filenames from png_prefix and out_dir, then delegate to draw_loss
     Loss_png_names = ("Loss.png", "L1.png", "L2.png")

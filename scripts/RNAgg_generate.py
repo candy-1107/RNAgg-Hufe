@@ -3,8 +3,6 @@ import os
 import argparse
 import pickle
 import numpy as np
-import torch
-import RNAgg_VAE
 
 # ensure repo scripts on path
 _this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +12,9 @@ if _this_dir not in sys.path:
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
-
+import torch
+import torch.nn.functional as F
+import RNAgg_VAE
 
 NUC_LETTERS = list('ACGU-x')
 SINGLE_LABELS = ["A", "U", "G", "C", "gap"]
@@ -107,72 +107,7 @@ def generate_from_conv_checkpoint(model, z, device, threshold=0.5):
     return results
 
 
-def generate_from_decoder(model, z, device):
-    """
-    Decode latent vectors using model.decoder(z) and convert to sequences.
-    Steps (as requested):
-      - call model.decoder(z) -> y with shape (n, 11, h, w)
-      - permute to (n, h, 11, w)
-      - sum over last dim -> (n, h, 11)
-      - softmax over class dim (11) and argmax -> indices (n, h)
-      - map indices to ALL_LABELS and then to single-letter bases where appropriate
-    Returns list of sequence strings (one per sample).
-    """
-    model.to(device)
-    model.eval()
-    with torch.no_grad():
-        # ensure z is on the right device
-        z_t = z.to(device)
-        # prefer decoder attribute, fall back to decode if necessary
-        if hasattr(model, 'decoder'):
-            y = model.decoder(z_t)
-        elif hasattr(model, 'decode'):
-            # try calling decode without conv shape
-            try:
-                y = model.decode(z_t)
-            except Exception:
-                raise RuntimeError('Model does not support decoder(z) and decode(z) failed; cannot decode with this model')
-        else:
-            raise RuntimeError('Model has no decoder/decode attribute')
-        y_cpu = y.detach().cpu()
-    # y_cpu expected shape (n, 11, h, w)
-    if y_cpu.dim() != 4:
-        raise RuntimeError(f'decoder output expected 4D tensor (n,11,h,w) but got shape {tuple(y_cpu.shape)}')
-    n, c, h, w = y_cpu.shape
-    if c != len(ALL_LABELS):
-        # allow some flexibility but warn
-        raise RuntimeError(f'decoder output channel dimension {c} != expected {len(ALL_LABELS)}')
-    # permute to (n, h, 11, w)
-    y_perm = y_cpu.permute(0, 2, 1, 3).contiguous()
-    # sum over last dim -> (n, h, 11)
-    y_sum = y_perm.sum(dim=3)
-    # softmax over class dim (2)
-    probs = torch.nn.functional.softmax(y_sum, dim=2)
-    # argmax to get indices (n, h)
-    idx = torch.argmax(probs, dim=2)
-    idx_np = idx.cpu().numpy()
-    results = []
-    for i in range(n):
-        labels = []
-        for j in range(h):
-            k = int(idx_np[i, j])
-            label = ALL_LABELS[k]
-            # convert to a single character for sequence: if single label, map 'gap'->'-'
-            if label in SINGLE_LABELS:
-                if label == 'gap':
-                    labels.append('-')
-                else:
-                    labels.append(label)
-            else:
-                # pair label like 'A-U' -> take first base before '-' as the residue at this position
-                first = label.split('-')[0]
-                labels.append(first)
-        seq_str = ''.join(labels)
-        results.append(seq_str)
-    return results
-
-
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Generate sequences from a Conv_VAE checkpoint and save to results/<family>.txt')
     parser.add_argument('--model', required=True, help='path to saved Conv_VAE model .pth (must contain input_shape and d_rep)')
     parser.add_argument('-n', type=int, default=10, help='number of samples to generate (ignored if --from-emb)')
@@ -181,30 +116,19 @@ if __name__ == '__main__':
     parser.add_argument('--family', help='family name to use as output filename (defaults to model basename)')
     parser.add_argument('--device', default=None, help='device (cpu or cuda); if omitted auto-detect')
     parser.add_argument('--threshold', type=float, default=0.5, help='probability threshold for deciding bases/pairs')
-    parser.add_argument('--out_dir', default=None, help='output directory (defaults to results/ under project root)')
     args = parser.parse_args()
 
     device = torch.device(args.device if args.device else ('cuda' if torch.cuda.is_available() else 'cpu'))
+    print(f'Using device: {device}', file=sys.stderr)
 
-    # load checkpoint onto chosen device (so tensors like input_shape, etc. are available)
-    ckpt = torch.load(args.model, map_location=device)
-    # support older checkpoints that only stored max_len
-    if 'input_shape' not in ckpt:
-        max_len = ckpt.get('max_len')
-        if max_len is None:
-            raise RuntimeError('Checkpoint missing input shape and max_len; cannot infer model input size')
-        input_C = ckpt.get('input_C', 11)
-        input_shape = (input_C, max_len, max_len)
-    else:
-        input_shape = tuple(ckpt['input_shape'])
+    ckpt = torch.load(args.model, map_location='cpu')
+    if 'input_shape' not in ckpt or 'model_state_dict' not in ckpt or 'd_rep' not in ckpt:
+        raise RuntimeError('Checkpoint does not look like a Conv_VAE checkpoint (missing input_shape/d_rep/model_state_dict)')
 
-    if 'd_rep' not in ckpt or 'model_state_dict' not in ckpt:
-        raise RuntimeError('Checkpoint does not look like a Conv_VAE checkpoint (missing d_rep/model_state_dict)')
-
+    input_shape = tuple(ckpt['input_shape'])
     d_rep = int(ckpt['d_rep'])
 
-    # always use Conv_VAE
-    model = RNAgg_VAE.Conv_VAE(input_shape, latent_dim=d_rep, device=str(device)).to(device)
+    model = RNAgg_VAE.Conv_VAE(input_shape, latent_dim=d_rep, device=device).to(device)
     model.load_state_dict(ckpt['model_state_dict'])
     model.to(device)
     model.eval()
@@ -229,26 +153,19 @@ if __name__ == '__main__':
         n_samples = int(args.n)
         z = torch.randn(n_samples, d_rep, device=device)
 
-    # If embeddings were provided, use the decoder-based generation path
-    if args.from_emb:
-        seqs = generate_from_decoder(model, z, device)
-        # decide family name and output directory
-        family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
-        out_dir = args.out_dir if args.out_dir else os.path.join(_project_root, 'results')
-        os.makedirs(out_dir, exist_ok=True)
-        out_path = os.path.join(out_dir, f"{family}.txt")
-        with open(out_path, 'w', encoding='utf-8') as fout:
-            for i, seq in enumerate(seqs):
-                fout.write(f'gen{i}\t{seq}\n')
-        print(f'Wrote {len(seqs)} sequences to {out_path}', file=sys.stderr)
-    else:
-        results = generate_from_conv_checkpoint(model, z, device, threshold=args.threshold)
-        # decide family name and output directory
-        family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
-        out_dir = args.out_dir if args.out_dir else os.path.join(_project_root, 'results')
-        os.makedirs(out_dir, exist_ok=True)
-        out_path = os.path.join(out_dir, f"{family}.txt")
-        with open(out_path, 'w', encoding='utf-8') as fout:
-            for i, (seq, ss) in enumerate(results):
-                fout.write(f'gen{i}\t{seq}\t{ss}\n')
-        print(f'Wrote {len(results)} sequences to {out_path}', file=sys.stderr)
+    results = generate_from_conv_checkpoint(model, z, device, threshold=args.threshold)
+
+    # decide family name
+    family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
+    out_dir = os.path.join(_project_root, 'results')
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, f"{family}.txt")
+
+    with open(out_path, 'w', encoding='utf-8') as fout:
+        for i, (seq, ss) in enumerate(results):
+            fout.write(f'gen{i}\t{seq}\t{ss}\n')
+
+    print(f'Wrote {len(results)} sequences to {out_path}', file=sys.stderr)
+
+if __name__ == '__main__':
+    main()
