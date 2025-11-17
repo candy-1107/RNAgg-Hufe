@@ -60,4 +60,7 @@ python organize_results_by_category.py --models_root ..\results --dest_root ..\f
 
 
 #train
-python scripts\RNAgg_train.py --data-pt data\RF00001.matrices_aligned.pt --out_dir results --model_fname model_RF00001.pth --epoch 200 --s_bat 32 --d_rep 11 --lr 0.0005 --beta 0.001 --save_ongoing 10 --save-latent-dir latents --save-recon-dir reconstructions --png_prefix RF00001_
+python scripts\RNAgg_train.py --data-pt data\RF00005.matrices_aligned.pt --out_dir results --model_fname model_RF00005.pth --epoch 10 --s_bat 16 --d_rep 11 --lr 0.0005 --beta 0.001 --save_ongoing 0 --save-latent-dir latents  --save-recon-dir reconstructions --png_prefix RF00005_
+
+#generate
+python scripts\RNAgg_generate.py --model results\model_RF00005.pth --num 10 --emb-file results\latents --family RF00005 --device cuda --out_dir results
