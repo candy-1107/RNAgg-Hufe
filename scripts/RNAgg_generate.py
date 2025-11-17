@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 import pickle
+import re
 import numpy as np
 import torch
 import RNAgg_VAE
@@ -29,6 +30,53 @@ def softmax(x):
 
 def sigmoid(x):
     return 1.0 / (1.0 + np.exp(-x))
+
+
+# -------------- Dedup helpers --------------
+
+SEQ_TOKEN_RE = re.compile(r"^[ACGU\-]+$", re.IGNORECASE)
+ALLOWED_BASES = set("ACGU-")
+
+# 此函数用于规范化序列字符串
+def _norm_seq(s: str, strip_x: bool = False) -> str:
+    # 默认不处理 'x'，按要求仅使用 ACGU- 的数据集
+    s = s.strip().upper()
+    return s if not strip_x else s.replace('X', '')
+
+# 从行的各个部分中选择序列tokens
+def _pick_seq_tokens(parts):
+    # prefer the first token that looks like a sequence
+    for p in parts:
+        if SEQ_TOKEN_RE.match(p):
+            return p
+    # fallback: second column if exists
+    if len(parts) >= 2:
+        return parts[1]
+    return parts[0]
+
+# 载入用于去重的序列集合
+def load_dedup_set(paths, strip_x: bool = True):
+    """Load sequences from one or more text files into a set for dedup.
+    Accepts lines like:
+      id seq struct
+      id seq
+      seq
+    """
+    seqs = set()
+    for path in paths or []:
+        if not path or not os.path.exists(path):
+            continue
+        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+            for line in f:
+                s = line.strip()
+                if not s or s.startswith('#'):
+                    continue
+                parts = s.split()
+                if len(parts) == 0:
+                    continue
+                token = _pick_seq_tokens(parts)
+                seqs.add(_norm_seq(token, strip_x=strip_x))
+    return seqs
 
 
 def matrices_to_seq_struct_from_probs(mat_probs, threshold=0.5):
@@ -182,6 +230,13 @@ if __name__ == '__main__':
     parser.add_argument('--device', default=None, help='device (cpu or cuda); if omitted auto-detect')
     parser.add_argument('--threshold', type=float, default=0.5, help='probability threshold for deciding bases/pairs')
     parser.add_argument('--out_dir', default=None, help='output directory (defaults to results/ under project root)')
+    # dedup options
+    parser.add_argument('--dedup-files', nargs='*', default=None,
+                        help='one or more text files to deduplicate against (training/original datasets)')
+    # 默认不移除 x；保留兼容参数名但语义为将 strip_x 设为 False（默认 False）
+    parser.add_argument('--no-strip-x', dest='strip_x', action='store_false', help="do not strip 'x' (default)")
+    parser.add_argument('--max-tries', type=int, default=0,
+                        help='max generation rounds to reach requested unique count (sampling mode)')
     args = parser.parse_args()
 
     device = torch.device(args.device if args.device else ('cuda' if torch.cuda.is_available() else 'cpu'))
@@ -232,6 +287,30 @@ if __name__ == '__main__':
     # If embeddings were provided, use the decoder-based generation path
     if args.from_emb:
         seqs = generate_from_decoder(model, z, device)
+        removed = []
+        # optional dedup in embedding mode (cannot refill automatically)
+        if args.dedup_files:
+            strip_x = bool(getattr(args, 'strip_x', False))
+            exclude = load_dedup_set(args.dedup_files, strip_x=strip_x)
+            seen = set()
+            uniq = []
+            for s in seqs:
+                # 先过滤非法字符（如含 N）
+                if any(ch not in ALLOWED_BASES for ch in s.upper()):
+                    removed.append(("invalid", s))
+                    continue
+                s_norm = _norm_seq(s, strip_x=strip_x)
+                if s_norm in exclude:
+                    removed.append(("in_ref", s))
+                    continue
+                if s_norm in seen:
+                    removed.append(("dup", s))
+                    continue
+                seen.add(s_norm)
+                uniq.append(s)
+            if len(uniq) < len(seqs):
+                print(f"[warn] dedup removed {len(seqs)-len(uniq)} sequences; embedding mode cannot auto-refill", file=sys.stderr)
+            seqs = uniq
         # decide family name and output directory
         family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
         out_dir = args.out_dir if args.out_dir else os.path.join(_project_root, 'results')
@@ -241,8 +320,46 @@ if __name__ == '__main__':
             for i, seq in enumerate(seqs):
                 fout.write(f'gen{i}\t{seq}\n')
         print(f'Wrote {len(seqs)} sequences to {out_path}', file=sys.stderr)
+        # write removed if any
+        if args.dedup_files and removed:
+            removed_path = os.path.join(out_dir, f"{family}.removed.txt")
+            with open(removed_path, 'w', encoding='utf-8') as fr:
+                for reason, seq in removed:
+                    fr.write(f'{reason}\t{seq}\n')
+            print(f'Removed {len(removed)} sequences written to {removed_path}', file=sys.stderr)
     else:
-        results = generate_from_conv_checkpoint(model, z, device, threshold=args.threshold)
+        # Sampling mode: ensure dedup and refill to reach n samples
+        need = int(args.n)
+        got = []
+        strip_x = bool(getattr(args, 'strip_x', False))
+        exclude = load_dedup_set(args.dedup_files, strip_x=strip_x) if args.dedup_files else set()
+        seen = set()
+        tries = 0
+        removed = []
+        while len(got) < need and tries < max(1, args.max_tries):
+            tries += 1
+            remaining = need - len(got)
+            z_batch = torch.randn(remaining, d_rep, device=device)
+            batch = generate_from_conv_checkpoint(model, z_batch, device, threshold=args.threshold)
+            for (seq, ss) in batch:
+                # 先过滤非法字符（如含 N）
+                if any(ch not in ALLOWED_BASES for ch in seq.upper()):
+                    removed.append(("invalid", seq, ss))
+                    continue
+                s_norm = _norm_seq(seq, strip_x=strip_x)
+                if s_norm in exclude:
+                    removed.append(("in_ref", seq, ss))
+                    continue
+                if s_norm in seen:
+                    removed.append(("dup", seq, ss))
+                    continue
+                seen.add(s_norm)
+                got.append((seq, ss))
+                if len(got) >= need:
+                    break
+        if len(got) < need:
+            print(f"[warn] requested {need} unique sequences; generated {len(got)} after {tries} rounds", file=sys.stderr)
+        results = got
         # decide family name and output directory
         family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
         out_dir = args.out_dir if args.out_dir else os.path.join(_project_root, 'results')
@@ -252,3 +369,11 @@ if __name__ == '__main__':
             for i, (seq, ss) in enumerate(results):
                 fout.write(f'gen{i}\t{seq}\t{ss}\n')
         print(f'Wrote {len(results)} sequences to {out_path}', file=sys.stderr)
+        # write removed if any
+        if args.dedup_files and removed:
+            removed_path = os.path.join(out_dir, f"{family}.removed.txt")
+            with open(removed_path, 'w', encoding='utf-8') as fr:
+                for item in removed:
+                    reason, seq, ss = item
+                    fr.write(f'{reason}\t{seq}\t{ss}\n')
+            print(f'Removed {len(removed)} sequences written to {removed_path}', file=sys.stderr)

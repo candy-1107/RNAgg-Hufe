@@ -78,15 +78,13 @@ class ConvEncoder(nn.Module):
         h_e = F.relu(h_e)
 
         mu = self.fc_mu(h_e)
-        # ensure variance is positive for reparameterization
         var = F.softplus(self.fc_var(h_e))
 
-        # return stats (reparameterization moved to Conv_VAE)
         return mu, var
 
 
 class ConvDecoder(nn.Module):
-    def __init__(self, enc_ch, enc_h, enc_w, latent_dim=128, n_layers=3, reduction=3):
+    def __init__(self, enc_ch, enc_h, enc_w, latent_dim=128, reduction=3):
         super().__init__()
         self.enc_ch = enc_ch
         self.enc_h = enc_h
@@ -102,27 +100,34 @@ class ConvDecoder(nn.Module):
         self.dec_bn3 = nn.BatchNorm1d(self.dec_fc3.out_features)
         self.fc_decode = nn.Linear(self.dec_fc3.out_features, enc_flat)
 
-        # build conv-transpose trunk that consumes (enc_ch, enc_h, enc_w)
-        layers = []
+
         in_ch = enc_ch
         H, W = enc_h, enc_w
-        for i in range(n_layers):
-            out_ch = max(1, in_ch // 2)
-            layers.append(nn.ConvTranspose2d(in_ch, out_ch, kernel_size=4, stride=2, padding=1))
-            layers.append(nn.BatchNorm2d(out_ch))
-            layers.append(nn.ReLU(inplace=True))
-            in_ch = out_ch
-        self.net = nn.Sequential(*layers)
 
-        for _ in range(n_layers):
-            H = (H - 1) * 2 - 2 * 1 + 4
-            W = (W - 1) * 2 - 2 * 1 + 4
-            in_ch = out_ch
-        self.out_hw = (in_ch, H, W)
-        print('decoder out_hw:', in_ch, H, W)
+        out_ch1 = max(1, in_ch // 2)
+        self.deconv1 = nn.ConvTranspose2d(in_ch, out_ch1, kernel_size=4, stride=2, padding=1, output_padding=1)
+        self.debn1 = nn.BatchNorm2d(out_ch1)
 
-        # attach attention layer same as before
-        dec_out_ch = enc_ch // (2 ** n_layers)
+        in_ch = out_ch1
+        out_ch2 = max(1, in_ch // 2)
+        self.deconv2 = nn.ConvTranspose2d(in_ch, out_ch2, kernel_size=4, stride=2, padding=1, output_padding=1)
+        self.debn2 = nn.BatchNorm2d(out_ch2)
+
+        in_ch = out_ch2
+        out_ch3 = max(1, in_ch // 2)
+        self.deconv3 = nn.ConvTranspose2d(in_ch, out_ch3, kernel_size=4, stride=2, padding=1)
+        self.debn3 = nn.BatchNorm2d(out_ch3)
+
+        H1 = (H - 1) * 2 - 2 * 1 + 4 + 1
+        W1 = (W - 1) * 2 - 2 * 1 + 4 + 1
+        H2 = (H1 - 1) * 2 - 2 * 1 + 4 + 1
+        W2 = (W1 - 1) * 2 - 2 * 1 + 4 + 1
+        H3 = (H2 - 1) * 2 - 2 * 1 + 4
+        W3 = (W2- 1) * 2 - 2 * 1 + 4
+        self.out_hw = (out_ch3, H3, W3)
+        print('decoder out_hw:', out_ch3, H3, W3)
+
+        dec_out_ch = out_ch3
         self.attention = ChannelSELayer(dec_out_ch, reduction=reduction)
 
     def forward(self, z):
@@ -137,10 +142,21 @@ class ConvDecoder(nn.Module):
         h_d = F.relu(h_d)
         h_flat_decode = self.fc_decode(h_d)
 
-        # reshape to conv feature shape and run conv-transpose trunk
         b = z.size(0)
         h_conv = h_flat_decode.view(b, self.enc_ch, self.enc_h, self.enc_w)
-        return self.net(h_conv)
+        x = h_conv
+
+        x = self.deconv1(x)
+        x = self.debn1(x)
+        x = F.relu(x, inplace=True)
+        x = self.deconv2(x)
+        x = self.debn2(x)
+        x = F.relu(x, inplace=True)
+        x = self.deconv3(x)
+        x = self.debn3(x)
+        x = F.relu(x, inplace=True)
+        x = self.attention(x)
+        return x
 
 
 class Conv_VAE(nn.Module):
@@ -150,7 +166,6 @@ class Conv_VAE(nn.Module):
         self.input_shape = input_shape
         self.latent_dim = latent_dim
         C, H, W = input_shape
-        self.n_layers = n_layers
 
         # encoder: now returns z, mu, var
         self.attention = ChannelSELayer(C, reduction=reduction)
@@ -160,7 +175,7 @@ class Conv_VAE(nn.Module):
         print('after-encoder', self.enc_shape)
 
         # decoder
-        self.decoder = ConvDecoder(enc_ch=enc_ch, enc_h=enc_h, enc_w=enc_w, latent_dim=latent_dim, n_layers=n_layers, reduction=reduction)
+        self.decoder = ConvDecoder(enc_ch=enc_ch, enc_h=enc_h, enc_w=enc_w, latent_dim=latent_dim, reduction=reduction)
 
     def forward(self, x):
         x = self.attention(x)
