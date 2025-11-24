@@ -1,0 +1,19 @@
+#核苷酸一致性
+cd "/mnt/d/PyCharm 2024.1.7/Code/RNAgg-Hufe/plot_view"
+
+awk '{print ">sed_" NR "\n" $0}' RF00001.txt > RF00001.fasta
+awk '{print ">sed_" NR "\n" $0}' RF00001_aligned.txt > RF00001_aligned.fasta
+sed 's/-//g' RF00001_clean.fasta > RF00001_clean_no_dash.fasta
+
+# 输入文件：RF00001.cm（模型） + generated_sequences_final.fasta（生成序列） + RF00001_seed_final.fasta（种子序列）
+cmalign -o combined_alignment.sto RF00001.cm generated_sequences_final.fasta RF00001_seed_final.fasta
+cmalign -o RF00001.sto RF00001.cm RF00001_clean.fasta
+cmalign --cpu 10 --mapali ../data/seed_stk/RF00001.stk -o ../data/gen_sto/RF00001.sto ../data/cms/RF00001.cm ../data/gen_clean_fasta/RF00001.fasta
+
+
+#单个
+python identity.py --sto-files RF00001.sto --ref-id-pattern "RF"
+#多个
+python identity.py --sto-files "RF00001.sto" "RF00002.sto" "RF00003.sto" --seed-keyword "RF00001"
+#当前目录
+python identity.py --sto-files *.sto --seed-keyword "RF00001"

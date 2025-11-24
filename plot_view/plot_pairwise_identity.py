@@ -12,11 +12,9 @@ import itertools
 import os
 import sys
 from pathlib import Path
+import re
 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-from Bio import AlignIO
+# Delay heavy/optional imports until we can check and show helpful error messages
 
 # --- Configuration ---
 # Define project structure and file locations.
@@ -49,8 +47,6 @@ PALETTE = {
     "nuc-ali": "#bebada",
     "RNAgg-ali": "#fb8072",
     "seed": "#80b1d3",
-    # "RfamGen" is in the example, but we don't have data for it.
-    # If you have it, add it to MODELS_TO_PLOT and here.
 }
 
 
@@ -101,6 +97,46 @@ def calculate_pairwise_identity(alignment):
     return identities
 
 
+# New helper: compute per-pair identities along with sequence ids
+def compute_pairwise_identity_rows(alignment, family_id=None, model_label=None):
+    """Return list of dict rows with seq ids and identity for each pair in alignment."""
+    rows = []
+    if len(alignment) < 2:
+        return rows
+
+    for rec1, rec2 in itertools.combinations(alignment, 2):
+        seq1 = str(rec1.seq)
+        seq2 = str(rec2.seq)
+        matches = 0
+        valid_columns = 0
+        for c1, c2 in zip(seq1, seq2):
+            if c1 in "-." and c2 in "-.":
+                continue
+            valid_columns += 1
+            if c1 == c2 and c1 not in "-.":
+                matches += 1
+
+        identity = matches / valid_columns if valid_columns > 0 else 0.0
+        rows.append({
+            "family": family_id,
+            "model": model_label,
+            "seq1_id": rec1.id,
+            "seq2_id": rec2.id,
+            "identity": identity,
+        })
+
+    return rows
+
+
+def _extract_family_id_from_name(name: str) -> str:
+    """Try to extract an RFxxxxx family id from a filename/stem."""
+    m = re.search(r"(RF\d{5})", name)
+    if m:
+        return m.group(1)
+    # fallback to the stem (without extension)
+    return Path(name).stem
+
+
 def main():
     """Main function to run the analysis and plotting workflow."""
     parser = argparse.ArgumentParser(description="Plot pairwise nucleotide identity from alignments.")
@@ -110,50 +146,129 @@ def main():
         default=",".join([f"RF{i:05d}" for i in range(1, 11)]),
         help='Comma-separated list of Rfam family IDs to process (e.g., "RF00001,RF00002").'
     )
+    parser.add_argument(
+        '--sto-files',
+        nargs='+',
+        help='One or more paths to Stockholm (.sto/.stk) files to process directly. If provided, these files will be used instead of the --families default behavior.'
+    )
+    parser.add_argument(
+        '--output',
+        type=str,
+        default=None,
+        help='Optional output path for the plot image. If not provided, uses the default configured OUTPUT_PLOT_FILE.'
+    )
+    parser.add_argument(
+        '--identity-csv',
+        type=str,
+        default=str(PROJECT_ROOT / 'results' / 'pairwise_identity_pairs.csv'),
+        help='Path to save detailed pairwise identity CSV when --sto-files is used. Default: results/pairwise_identity_pairs.csv'
+    )
+    parser.add_argument(
+        '--skip-plot',
+        action='store_true',
+        help='When set along with --sto-files, skip plotting and only save the detailed CSV (useful if plotting deps are not installed).'
+    )
     args = parser.parse_args()
-    families_to_process = sorted([fam.strip() for fam in args.families.split(',')])
+
+    # Delay heavy plotting imports until we actually need them.
+    # Always try to import AlignIO if --sto-files is used (we need it to read sto files).
+    if args.sto_files:
+        try:
+            from Bio import AlignIO
+        except Exception as e:
+            missing = getattr(e, 'name', None) or str(e)
+            print(f"[ERROR] Missing required package for reading Stockholm files: {missing}", file=sys.stderr)
+            print("Please install biopython: pip install biopython", file=sys.stderr)
+            sys.exit(1)
+
+    # If user requested plotting (default) we'll import plotting libs later; allow CSV-only runs via --skip-plot
+    families_to_process = sorted([fam.strip() for fam in args.families.split(',')]) if not args.sto_files else []
 
     all_data = []
 
     print("--- Starting Pairwise Identity Calculation ---")
 
-    for family_id in families_to_process:
-        print(f"Processing Family: {family_id}")
-
-        for plot_name, model_dir_name in MODELS_TO_PLOT.items():
-            file_path = None
-            if model_dir_name == "seed":
-                # Special case: load original seed alignment
-                file_path = RFAM_SEED_DIR / f"{family_id}.stk"
-            else:
-                # Load generated alignments
-                file_path = ALIGNMENT_DIR / model_dir_name / f"{family_id}_aligned.sto"
-
-            if not file_path or not file_path.exists():
-                print(f"  [WARNING] File not found for model '{plot_name}', skipping: {file_path}", file=sys.stderr)
+    if args.sto_files:
+        # Process explicitly provided sto files
+        pairwise_rows_all = []
+        for sto_path in args.sto_files:
+            path = Path(sto_path)
+            if not path.exists():
+                print(f"  [WARNING] Provided file does not exist, skipping: {path}", file=sys.stderr)
                 continue
 
+            print(f"Processing file: {path}")
             try:
-                # Parse the alignment file (works for both Stockholm)
-                alignment = AlignIO.read(file_path, "stockholm")
+                # Try reading stockholm format
+                alignment = AlignIO.read(str(path), "stockholm")
+                # Derive family id and model name from the path
+                family_id = _extract_family_id_from_name(path.name)
+                model_label = path.parent.name if path.parent and path.parent.name else Path(path).stem
 
-                # Calculate identities
-                identities = calculate_pairwise_identity(alignment)
-                if not identities:
-                    print(f"  [INFO] No identities calculated for {file_path.name} (sequences < 2).")
+                rows = compute_pairwise_identity_rows(alignment, family_id=family_id, model_label=model_label)
+                if not rows:
+                    print(f"  [INFO] No identities calculated for {path.name} (sequences < 2).")
                     continue
 
-                # Append data for plotting
-                for identity in identities:
+                # add rows to both plotting data and csv collection
+                for r in rows:
                     all_data.append({
-                        "family": family_id,
-                        "model": plot_name,
-                        "identity": identity,
+                        "family": r['family'],
+                        "model": r['model'],
+                        "identity": r['identity'],
                     })
-                print(f"  - Calculated {len(identities)} pairwise identities for '{plot_name}'.")
+                    pairwise_rows_all.append({
+                        "family": r['family'],
+                        "model": r['model'],
+                        "seq1_id": r['seq1_id'],
+                        "seq2_id": r['seq2_id'],
+                        "identity": r['identity'],
+                    })
+
+                print(f"  - Calculated {len(rows)} pairwise identities for file '{path.name}' (model='{model_label}').")
 
             except Exception as e:
-                print(f"  [ERROR] Failed to process file {file_path.name}: {e}", file=sys.stderr)
+                print(f"  [ERROR] Failed to process file {path.name}: {e}", file=sys.stderr)
+
+    else:
+        # Original behavior: iterate families and MODELS_TO_PLOT
+        for family_id in families_to_process:
+            print(f"Processing Family: {family_id}")
+
+            for plot_name, model_dir_name in MODELS_TO_PLOT.items():
+                file_path = None
+                if model_dir_name == "seed":
+                    # Special case: load original seed alignment
+                    file_path = RFAM_SEED_DIR / f"{family_id}.stk"
+                else:
+                    # Load generated alignments
+                    file_path = ALIGNMENT_DIR / model_dir_name / f"{family_id}_aligned.sto"
+
+                if not file_path or not file_path.exists():
+                    print(f"  [WARNING] File not found for model '{plot_name}', skipping: {file_path}", file=sys.stderr)
+                    continue
+
+                try:
+                    # Parse the alignment file (works for Stockholm)
+                    alignment = AlignIO.read(file_path, "stockholm")
+
+                    # Calculate identities
+                    identities = calculate_pairwise_identity(alignment)
+                    if not identities:
+                        print(f"  [INFO] No identities calculated for {file_path.name} (sequences < 2).")
+                        continue
+
+                    # Append data for plotting
+                    for identity in identities:
+                        all_data.append({
+                            "family": family_id,
+                            "model": plot_name,
+                            "identity": identity,
+                        })
+                    print(f"  - Calculated {len(identities)} pairwise identities for '{plot_name}'.")
+
+                except Exception as e:
+                    print(f"  [ERROR] Failed to process file {file_path.name}: {e}", file=sys.stderr)
 
     if not all_data:
         print("\n[ERROR] No data was collected. Cannot generate plot. Please check input files and paths.",
@@ -168,13 +283,22 @@ def main():
     plt.style.use('seaborn-v0_8-paper')  # Use a style suitable for papers
     fig, ax = plt.subplots(figsize=(15, 6))
 
+    # Build palette: include configured colors and assign new colors to unknown models
+    unique_models = list(df['model'].unique())
+    palette = PALETTE.copy()
+    missing_models = [m for m in unique_models if m not in palette]
+    if missing_models:
+        extra_colors = sns.color_palette('tab10', n_colors=max(3, len(missing_models)))
+        for i, m in enumerate(missing_models):
+            palette[m] = extra_colors[i % len(extra_colors)]
+
     sns.boxplot(
         data=df,
         x="family",
         y="identity",
         hue="model",
-        hue_order=list(MODELS_TO_PLOT.keys()),  # Ensure consistent legend order
-        palette=PALETTE,
+        hue_order=unique_models,
+        palette=palette,
         ax=ax,
         fliersize=0,  # Hide outlier points
         linewidth=1.2,
@@ -189,26 +313,102 @@ def main():
 
     # Legend
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles, labels, title="", loc='upper center', bbox_to_anchor=(0.5, 1.0), ncol=len(labels) // 2)
+    ncol = max(1, len(labels) // 2)
+    ax.legend(handles, labels, title="", loc='upper center', bbox_to_anchor=(0.5, 1.0), ncol=ncol)
 
     plt.tight_layout()
 
     # Save the plot
-    OUTPUT_PLOT_FILE.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(OUTPUT_PLOT_FILE, dpi=300)
+    out_path = Path(args.output) if args.output else OUTPUT_PLOT_FILE
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out_path, dpi=300)
 
-    print(f"\n✅ Plot saved successfully to: {OUTPUT_PLOT_FILE}")
+    print(f"\n✅ Plot saved successfully to: {out_path}")
+
+    # If sto-files were provided and user requested CSV output, save detailed pairs using builtin csv module
+    if args.sto_files:
+        csv_out = Path(args.identity_csv)
+        try:
+            import csv as _csv
+            csv_out.parent.mkdir(parents=True, exist_ok=True)
+            with open(csv_out, 'w', newline='', encoding='utf-8') as fh:
+                writer = _csv.DictWriter(fh, fieldnames=['family', 'model', 'seq1_id', 'seq2_id', 'identity'])
+                writer.writeheader()
+                for r in pairwise_rows_all:
+                    writer.writerow({
+                        'family': r.get('family'),
+                        'model': r.get('model'),
+                        'seq1_id': r.get('seq1_id'),
+                        'seq2_id': r.get('seq2_id'),
+                        'identity': r.get('identity'),
+                    })
+            print(f"\n✅ Detailed pairwise identities saved to: {csv_out}")
+        except Exception as e:
+            print(f"[WARNING] Failed to save pairwise CSV to {csv_out}: {e}", file=sys.stderr)
+
+        # If user asked to skip plotting, exit now.
+        if args.skip_plot:
+            print("Skipping plotting as --skip-plot was provided. Exiting.")
+            return
+
+    # Import plotting libraries now (may raise if missing)
+    try:
+        import matplotlib.pyplot as plt
+        import pandas as pd
+        import seaborn as sns
+    except Exception as e:
+        missing = getattr(e, 'name', None) or str(e)
+        print(f"[ERROR] Missing plotting package: {missing}", file=sys.stderr)
+        print("To generate the boxplot install: pip install pandas seaborn matplotlib", file=sys.stderr)
+        sys.exit(1)
+
+    # --- Plotting ---
+    print("\n--- Generating Boxplot ---")
+    plt.style.use('seaborn-v0_8-paper')  # Use a style suitable for papers
+    fig, ax = plt.subplots(figsize=(15, 6))
+
+    # Build palette: include configured colors and assign new colors to unknown models
+    unique_models = list(df['model'].unique())
+    palette = PALETTE.copy()
+    missing_models = [m for m in unique_models if m not in palette]
+    if missing_models:
+        extra_colors = sns.color_palette('tab10', n_colors=max(3, len(missing_models)))
+        for i, m in enumerate(missing_models):
+            palette[m] = extra_colors[i % len(extra_colors)]
+
+    sns.boxplot(
+        data=df,
+        x="family",
+        y="identity",
+        hue="model",
+        hue_order=unique_models,
+        palette=palette,
+        ax=ax,
+        fliersize=0,  # Hide outlier points
+        linewidth=1.2,
+    )
+
+    # Customize plot aesthetics
+    ax.set_xlabel("")
+    ax.set_ylabel("Pairwise nucleotide identity", fontsize=14)
+    ax.tick_params(axis='x', labelsize=12)
+    ax.tick_params(axis='y', labelsize=12)
+    ax.set_ylim(0.1, 1.05)
+
+    # Legend
+    handles, labels = ax.get_legend_handles_labels()
+    ncol = max(1, len(labels) // 2)
+    ax.legend(handles, labels, title="", loc='upper center', bbox_to_anchor=(0.5, 1.0), ncol=ncol)
+
+    plt.tight_layout()
+
+    # Save the plot
+    out_path = Path(args.output) if args.output else OUTPUT_PLOT_FILE
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out_path, dpi=300)
+
+    print(f"\n✅ Plot saved successfully to: {out_path}")
 
 
 if __name__ == "__main__":
-    # Check for required packages
-    try:
-        import pandas
-        import seaborn
-        import Bio
-    except ImportError as e:
-        print(f"[ERROR] Missing required Python package: {e.name}", file=sys.stderr)
-        print("Please install it by running: pip install pandas seaborn biopython matplotlib", file=sys.stderr)
-        sys.exit(1)
-
     main()

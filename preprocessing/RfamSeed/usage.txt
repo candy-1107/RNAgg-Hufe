@@ -19,7 +19,9 @@ python _make_input_consG4.py rfam_out\rfam_stk\RF00010.stk rfam_out\rfam_unalign
 
 
 # 生成矩阵
-python _make_input_matrix.py --aligned-dir rfam_out\rfam_aligned --output-root ..\..\matrices --aggregate
+python _make_input_matrix.py --aligned-dir rfam_out/rfam_aligned --output-root ../../matrices --aggregate
+#linux
+python _make_input_matrix.py --aligned-dir rfam_out/rfam_aligned --output-root ../matrices --aggregate
 
 
 

@@ -137,12 +137,22 @@ def list_family_files(data_dir, patterns=None):
     return files
 
 
-def build_dataloader_from_data_dir(data_dir, batch_size=100, shuffle=True, families=None):
+def build_dataloader_from_data_dir(data_dir, batch_size=100, shuffle=True, families=None, num_workers=None, pin_memory=True):
     """Load all family files under data_dir, pad to common shape and return (DataLoader, shape, full_tensor).
     shape returned is (N,C,H,W) where N is total samples across families.
+    Accepts optional DataLoader performance kwargs: num_workers (int or None) and pin_memory (bool).
     """
     if not os.path.isdir(data_dir):
         raise RuntimeError(f'data_dir not a directory: {data_dir}')
+    # determine default workers if not provided
+    if num_workers is None:
+        try:
+            cpu_count = os.cpu_count() or 1
+        except Exception:
+            cpu_count = 1
+        # keep a modest default (half of cpus, capped at 8)
+        num_workers = max(0, min(8, cpu_count // 2))
+
     # find candidate family files
     files = list_family_files(data_dir)
     # also accept per-family files named like RF00001.matrices_aligned.pt in directory
@@ -195,17 +205,27 @@ def build_dataloader_from_data_dir(data_dir, batch_size=100, shuffle=True, famil
     full_tensor = torch.from_numpy(full).float()
     N, C, H, W = full_tensor.shape
     ds = TensorDataset(full_tensor)
-    loader = DataLoader(ds, batch_size=batch_size, shuffle=shuffle)
+    # use persistent_workers when num_workers > 0 for slight speedup
+    loader = DataLoader(ds, batch_size=batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=pin_memory, persistent_workers=(num_workers>0))
     return loader, (N, C, H, W), full_tensor
 
 
-def build_dataloader_from_pt(pt_path, batch_size=100, shuffle=True):
+def build_dataloader_from_pt(pt_path, batch_size=100, shuffle=True, num_workers=None, pin_memory=True):
     """Load a single .pt/.npy dataset file and return (DataLoader, shape, full_tensor).
     Accepts torch-saved tensors, numpy arrays, dicts with tensor/array, or a Dataset-like object.
     Returns loader, (N,C,H,W), full_tensor(torch.Tensor).
+    Optionally accepts num_workers and pin_memory for the returned DataLoader.
     """
     if not os.path.exists(pt_path):
         raise RuntimeError(f".pt file not found: {pt_path}")
+
+    if num_workers is None:
+        try:
+            cpu_count = os.cpu_count() or 1
+        except Exception:
+            cpu_count = 1
+        num_workers = max(0, min(8, cpu_count // 2))
+
     # Use the internal loader to support multiple file types
     try:
         arr = _load_pt_or_npy(pt_path)
@@ -261,6 +281,6 @@ def build_dataloader_from_pt(pt_path, batch_size=100, shuffle=True):
         full_tensor = full_tensor.float()
     ds = TensorDataset(full_tensor)
     drop_last = True if batch_size and batch_size > 1 else False
-    loader = DataLoader(ds, batch_size=batch_size, shuffle=shuffle, drop_last=drop_last)
+    loader = DataLoader(ds, batch_size=batch_size, shuffle=shuffle, drop_last=drop_last, num_workers=num_workers, pin_memory=pin_memory, persistent_workers=(num_workers>0))
     return loader, (N, C, H, W), full_tensor
 

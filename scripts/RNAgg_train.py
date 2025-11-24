@@ -13,6 +13,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import RNAgg_VAE
 import utils_gg as utils
+import csv as _csv
 
 os.environ.setdefault('KMP_DUPLICATE_LIB_OK', 'TRUE')
 _this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -33,7 +34,12 @@ def main(args: dict):
     data_pt = args['data_pt']
     if not os.path.exists(data_pt):
         raise RuntimeError(f"data_pt not found: {data_pt}")
-    default_family = os.path.splitext(os.path.basename(data_pt))[0]
+
+    base = os.path.splitext(os.path.basename(data_pt))[0]
+    if base.endswith('.matrices_aligned'):
+        default_family = base[:-len('.matrices_aligned')]
+
+
     family_name = args.get('family') if args.get('family') else default_family
     data_parent = os.path.dirname(os.path.abspath(data_pt))
     family_dir = os.path.join(data_parent, family_name)
@@ -49,7 +55,21 @@ def main(args: dict):
     # print(idx2token)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    train_loader, shape, full_tensor = utils.build_dataloader_from_pt(args['data_pt'], batch_size=args.get('s_bat', 100), shuffle=True)
+
+    # set sensible DataLoader / threading defaults to avoid CPU saturation
+    try:
+        cpu_count = os.cpu_count() or 1
+    except Exception:
+        cpu_count = 1
+    # choose a modest number of workers (half of CPUs, capped at 8)
+    num_workers = max(0, min(8, cpu_count // 2))
+    # limit internal torch thread usage to avoid OpenMP oversubscription
+    torch.set_num_threads(max(1, cpu_count // 2))
+
+    print(f"CUDA available: {torch.cuda.is_available()}, device_count: {torch.cuda.device_count()}, using device: {device}", file=sys.stderr)
+    print(f"DataLoader num_workers={num_workers}, pin_memory=True, torch intra-op threads={torch.get_num_threads()}", file=sys.stderr)
+
+    train_loader, shape, full_tensor = utils.build_dataloader_from_pt(args['data_pt'], batch_size=args.get('s_bat', 100), shuffle=True, num_workers=num_workers, pin_memory=True)
     B, C, H, W = shape
     input_shape = (C, H, W)
 
@@ -75,7 +95,8 @@ def main(args: dict):
 
         for batch in train_loader:
             x = batch[0]
-            x = x.to(device)
+            # asynchronously transfer to device when using pin_memory=True
+            x = x.to(device, non_blocking=True)
             N = x.size(0)
 
             optimizer.zero_grad()
@@ -195,6 +216,23 @@ def main(args: dict):
     print(f"Saved loss plots to {args['out_dir']}", file=sys.stderr)
 
 
+    # --- save numeric loss values (Loss, L1, L2) into data/loss/<family_name>.csv ---
+
+    repo_root = os.path.dirname(_this_dir)
+    loss_data_dir = os.path.join(repo_root, 'data', 'loss')
+    os.makedirs(loss_data_dir, exist_ok=True)
+    csv_fname = f"{family_name}.csv"
+    csv_path = os.path.join(loss_data_dir, csv_fname)
+    with open(csv_path, 'w', newline='') as _f:
+        _w = _csv.writer(_f)
+        _w.writerow(['epoch', 'loss', 'L1', 'L2'])
+        for i, (lv, l1v, l2v) in enumerate(zip(Loss_list, L1_list, L2_list), start=1):
+            _w.writerow([i, lv, l1v, l2v])
+    print(f"Saved numeric loss CSV to {csv_path}", file=sys.stderr)
+
+
+
+
 def save_model(best_model, input_shape, best_epoch, model_path, args):
     if isinstance(best_model, dict):
         model_state = copy.deepcopy(best_model)
@@ -261,11 +299,11 @@ if __name__ == '__main__':
     parser.add_argument('--model_fname', default='model_RNAgg.pth', help='model file name')
     parser.add_argument('--png_prefix', default='', help='prefix of png files')
     parser.add_argument('--save_ongoing', default=0, type=int, help='save model and latent spage during training')
-    parser.add_argument('--act_fname', help='activity file name (not used in --data-pt mode)')
+    # parser.add_argument('--act_fname', help='activity file name (not used in --data-pt mode)')
     parser.add_argument('--n_layers', type=int, default=3, help='number of layers for downsampling/upsampling')
     parser.add_argument('--save-latent-dir', dest='save_latent_dir', default=None, help='directory to save latent vectors (relative to out_dir if not absolute)')
-    parser.add_argument('--save-recon-dir', dest='save_recon_dir', default=None, help='directory to save reconstructions (relative to out_dir if not absolute)')
-    parser.add_argument('--recon-threshold', type=float, default=0.5, help='threshold for reconstruction sequence/structure')
+    # parser.add_argument('--save-recon-dir', dest='save_recon_dir', default=None, help='directory to save reconstructions (relative to out_dir if not absolute)')
+    # parser.add_argument('--recon-threshold', type=float, default=0.5, help='threshold for reconstruction sequence/structure')
     parser.add_argument('--verbose', action='store_true', help='print per-batch training logs')
     args = vars(parser.parse_args())
     main(args)

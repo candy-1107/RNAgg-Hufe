@@ -1,7 +1,6 @@
 import sys
 import os
 import argparse
-import pickle
 import numpy as np
 import torch
 import RNAgg_VAE
@@ -31,93 +30,8 @@ def sigmoid(x):
     return 1.0 / (1.0 + np.exp(-x))
 
 
-def matrices_to_seq_struct_from_probs(mat_probs, threshold=0.5):
-    """
-    mat_probs: numpy array shape (11, L, L) with values in [0,1]
-    returns (seq_str, struct_str)
-    """
-    C, L1, L2 = mat_probs.shape
-    assert C == len(ALL_LABELS) and L1 == L2
-    L = L1
-    seq = ['N'] * L
-    struct = ['.'] * L
-    # pair channels: indices 5..10 for i<j
-    for i in range(L):
-        for j in range(i+1, L):
-            pair_vals = mat_probs[len(SINGLE_LABELS):, i, j]
-            max_idx = int(np.argmax(pair_vals))
-            max_val = float(pair_vals[max_idx])
-            if max_val >= threshold:
-                pair_label = PAIR_LABELS[max_idx]
-                b1, b2 = pair_label.split('-')
-                if seq[i] == 'N' or seq[i] == b1:
-                    seq[i] = b1
-                if seq[j] == 'N' or seq[j] == b2:
-                    seq[j] = b2
-                struct[i] = '('
-                struct[j] = ')'
-    # diagonal singles
-    for i in range(L):
-        if seq[i] != 'N':
-            continue
-        diag_vals = mat_probs[:len(SINGLE_LABELS), i, i]
-        max_idx = int(np.argmax(diag_vals))
-        max_val = float(diag_vals[max_idx])
-        if max_val >= threshold:
-            label = SINGLE_LABELS[max_idx]
-            seq[i] = '-' if label == 'gap' else label
-        else:
-            seq[i] = 'N'
-    return ''.join(seq), ''.join(struct)
-
-
-def generate_from_conv_checkpoint(model, z, device, threshold=0.5):
-    model.to(device)
-    model.eval()
-    with torch.no_grad():
-        conv_shape = getattr(model, 'enc_shape', None)
-        if conv_shape is None:
-            raise RuntimeError('Conv_VAE missing enc_shape; ensure model initialized with correct input_shape')
-        # decode: model.decode expects conv_shape
-        y = model.decode(z.to(device), conv_shape)
-        y_cpu = y.detach().cpu().numpy()
-    results = []
-    B, C, H, W = y_cpu.shape
-    # For each sample, build probability matrices:
-    for b in range(B):
-        mat = y_cpu[b]  # shape (11, H, W)
-        # We'll build mat_probs:
-        mat_probs = np.zeros_like(mat)
-        L = mat.shape[1]
-        # diagonal channels (first 5): apply softmax across channels at each diagonal position
-        for i in range(L):
-            diag_raw = mat[:5, i, i]
-            diag_prob = softmax(diag_raw)
-            mat_probs[:5, i, i] = diag_prob
-        # pair channels (6 channels): apply sigmoid to raw values for each (i,j)
-        pair_raw = mat[5:, :, :]
-        pair_sig = sigmoid(pair_raw)
-        # copy only upper triangle i<j
-        for i in range(L):
-            for j in range(i+1, L):
-                mat_probs[5:, i, j] = pair_sig[:, i, j]
-        # note: lower triangle ignored
-        seq, ss = matrices_to_seq_struct_from_probs(mat_probs, threshold=threshold)
-        results.append((seq, ss))
-    return results
-
 
 def generate_from_decoder(model, z, device):
-    """
-    Decode latent vectors using model.decoder(z) and convert to sequences.
-    Steps (as requested):
-      - call model.decoder(z) -> y with shape (n, 11, h, w)
-      - permute to (n, h, 11, w)
-      - sum over last dim -> (n, h, 11)
-      - softmax over class dim (11) and argmax -> indices (n, h)
-      - map indices to ALL_LABELS and then to single-letter bases where appropriate
-    Returns list of sequence strings (one per sample).
-    """
     model.to(device)
     model.eval()
     with torch.no_grad():
@@ -180,8 +94,7 @@ if __name__ == '__main__':
     parser.add_argument('--emb-file', help='(optional) alternative explicit path to embedding pickle file when using --from-emb')
     parser.add_argument('--family', help='family name to use as output filename (defaults to model basename)')
     parser.add_argument('--device', default=None, help='device (cpu or cuda); if omitted auto-detect')
-    parser.add_argument('--threshold', type=float, default=0.5, help='probability threshold for deciding bases/pairs')
-    parser.add_argument('--out_dir', default=None, help='output directory (defaults to results/ under project root)')
+    # parser.add_argument('--out_dir', default=None, help='output directory (defaults to results/ under project root)')
     args = parser.parse_args()
 
     device = torch.device(args.device if args.device else ('cuda' if torch.cuda.is_available() else 'cpu'))
@@ -211,44 +124,62 @@ if __name__ == '__main__':
 
     # prepare z
     if args.from_emb:
-        emb_path = args.emb_file if args.emb_file else str(args.n)
-        if not os.path.exists(emb_path):
-            raise RuntimeError(f'Embedding file not found: {emb_path}')
-        with open(emb_path, 'rb') as f:
-            z = pickle.load(f)
-        if isinstance(z, np.ndarray):
-            z = torch.tensor(z, dtype=torch.float32)
-        if isinstance(z, list):
-            z = torch.tensor(np.asarray(z), dtype=torch.float32)
-        if not isinstance(z, torch.Tensor):
-            raise RuntimeError('Loaded embedding is not a tensor/ndarray')
-        # ensure device
-        z = z.to(device)
-        n_samples = z.size(0)
-    else:
-        n_samples = int(args.n)
-        z = torch.randn(n_samples, d_rep, device=device)
+        # determine emb_dir: explicit or inferred from model parent/latents
+        if args.emb_file:
+            emb_dir = args.emb_file
+        else:
+            model_parent = os.path.dirname(os.path.abspath(args.model))
+            emb_dir = os.path.join(model_parent, 'latents')
 
-    # If embeddings were provided, use the decoder-based generation path
-    if args.from_emb:
-        seqs = generate_from_decoder(model, z, device)
-        # decide family name and output directory
-        family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
-        out_dir = args.out_dir if args.out_dir else os.path.join(_project_root, 'results')
-        os.makedirs(out_dir, exist_ok=True)
-        out_path = os.path.join(out_dir, f"{family}.txt")
-        with open(out_path, 'w', encoding='utf-8') as fout:
-            for i, seq in enumerate(seqs):
-                fout.write(f'gen{i}\t{seq}\n')
-        print(f'Wrote {len(seqs)} sequences to {out_path}', file=sys.stderr)
+        mean_path = os.path.join(emb_dir, 'latents_mean.npy')
+        var_path = os.path.join(emb_dir, 'latents_var.npy')
+
+        means = np.load(mean_path)
+        vars_ = np.load(var_path)
+        means_t = torch.from_numpy(means).float().to(device)
+        vars_t = torch.from_numpy(vars_).float().to(device)
+
+        m = means_t.size(0)
+        n = int(args.n)
+        if m >= n:
+            idx_np = np.random.choice(m, n, replace=False)
+        else:
+            idx_np = np.random.choice(m, n, replace=True)
+
+        # safe indexing using torch LongTensor on device
+        idx_t = torch.from_numpy(idx_np.astype(np.int64)).long().to(device)
+        sel_means = means_t.index_select(0, idx_t)
+        sel_vars = vars_t.index_select(0, idx_t)
+
+        # detect whether sel_vars is logvar (median<0 heuristic) or variance
+        if float(sel_vars.median()) < 0:
+            sel_std = torch.exp(0.5 * sel_vars)
+        else:
+            sel_std = torch.sqrt(torch.clamp(sel_vars, min=1e-10))
+
+        eps = torch.randn_like(sel_means)
+        z = sel_means + eps * sel_std
     else:
-        results = generate_from_conv_checkpoint(model, z, device, threshold=args.threshold)
-        # decide family name and output directory
-        family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
-        out_dir = args.out_dir if args.out_dir else os.path.join(_project_root, 'results')
-        os.makedirs(out_dir, exist_ok=True)
-        out_path = os.path.join(out_dir, f"{family}.txt")
-        with open(out_path, 'w', encoding='utf-8') as fout:
-            for i, (seq, ss) in enumerate(results):
-                fout.write(f'gen{i}\t{seq}\t{ss}\n')
-        print(f'Wrote {len(results)} sequences to {out_path}', file=sys.stderr)
+        n = int(args.n)
+        z = torch.normal(mean=0.0, std=1.0, size=(n, d_rep), device=device).float()
+
+    # decode
+    seqs = generate_from_decoder(model, z, device)
+
+    # save sequences
+    family = args.family if args.family else os.path.splitext(os.path.basename(args.model))[0]
+    if args.from_emb:
+        # save into the parent directory of the latents folder (e.g., data/RF00005)
+        save_dir = os.path.abspath(os.path.dirname(emb_dir))
+    else:
+        # default results directory under project root
+        save_dir = os.path.join(_project_root, f'data/{family}')
+        save_dir = os.path.abspath(save_dir)
+    os.makedirs(save_dir, exist_ok=True)
+    out_fname = os.path.join(save_dir, f"{family}.txt")
+
+    with open(out_fname, 'w') as f:
+        for s in seqs:
+            f.write(s + "\n")
+
+    print(f"Saved {len(seqs)} sequences to {out_fname}")
